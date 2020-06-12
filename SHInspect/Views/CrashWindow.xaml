@@ -1,0 +1,30 @@
+﻿<Window x:Class="SHInspect.Views.CrashWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SHInspect.Views"
+        mc:Ignorable="d" Background="Red"
+        Title="Unhandled Exception" Height="450" Width="450">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBox Margin="10" Background="Transparent" BorderThickness="0"  Foreground="White" Grid.Row="0" Grid.ColumnSpan="3" x:Name="ErrorTextBox" TextWrapping="WrapWithOverflow" IsReadOnly="True"></TextBox>
+        <Grid Margin="10"  Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Restart" Command="{Binding RestartCommand}" Margin="5" Grid.Column="0"/>
+            <Button Content="Exit" Command="{Binding CloseCommand}" Margin="5" Grid.Column="1"/>
+        </Grid>
+        
+    </Grid>
+</Window>

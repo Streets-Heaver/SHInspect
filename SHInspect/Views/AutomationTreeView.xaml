@@ -1,0 +1,124 @@
+﻿<UserControl x:Class="SHInspect.Views.AutomationTreeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SHInspect.Views"
+             xmlns:models="clr-namespace:SHInspect.Models"
+             mc:Ignorable="d" 
+             x:Name="automationTreeView"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:behaviours="clr-namespace:SHInspect.Classes"
+             xmlns:controls="clr-namespace:SHInspect.Controls" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition ></RowDefinition>
+        </Grid.RowDefinitions>
+        <GroupBox Header="Visual Tree" Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid>
+                <fa:IconImage  Icon="Spinner" fa:Awesome.Spin="True" Foreground="Gray"  Height="30" Width="30" Panel.ZIndex="1">
+                    <fa:IconImage.Style>
+                        <Style TargetType="{x:Type fa:IconImage}">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSearching}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </fa:IconImage.Style>
+                </fa:IconImage>
+                <TreeView ItemsSource="{Binding Elements, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VirtualizingPanel.IsVirtualizing="True"  x:Name="ItemTree" UseLayoutRounding="True" AllowDrop="False"  Focusable="False" Grid.Column="0" BorderThickness="0">
+                    <i:Interaction.Behaviors>
+                        <behaviours:BindableSelectedItemBehavior SelectedItem="{Binding SelectedItemInTree, Mode=TwoWay}" />
+                    </i:Interaction.Behaviors>
+                    <TreeView.ItemContainerStyle>
+
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="ItemsPanel">
+                                <Setter.Value>
+                                    <ItemsPanelTemplate>
+                                        <behaviours:MyVirtualizingStackPanel/>
+                                    </ItemsPanelTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                            <Setter Property="FontWeight" Value="Normal" />
+                            <EventSetter Event="Selected" Handler="TreeViewSelectedHandler" />
+                            <EventSetter Event="MouseDown" Handler="TreeViewSelectedHandler" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#efefef"/>
+                                </Trigger>
+
+                            </Style.Triggers>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}"  DataType="{x:Type models:Element}">
+                            <StackPanel Orientation="Horizontal"  Tag="{Binding ElementName=automationTreeView, Path=DataContext}">
+                                <StackPanel.ContextMenu>
+                                    <ContextMenu DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                        <MenuItem Header="Copy XPath" Command="{Binding CopyXPathCommand}"/>
+                                        <MenuItem Header="Go To Parent" Command="{Binding GoToParentCommand}"/>
+                                        <MenuItem Header="Go To Root" Command="{Binding GoToRootCommand}"/>
+                                        <MenuItem Header="Remove Window" Command="{Binding RemoveWindowCommand}"/>
+                                    </ContextMenu>
+                                </StackPanel.ContextMenu>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} &quot;{1}&quot; &quot;{2}&quot;">
+                                            <Binding Path="ControlType" />
+                                            <Binding Path="Name" />
+                                            <Binding Path="AutomationId" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </Grid>
+        </GroupBox>
+        <Button HorizontalAlignment="Right" Height="30" Width="30" IsTabStop="False" Focusable="False" Background="Transparent" Padding="5" BorderThickness="0" Grid.Row="0" Grid.Column="1"  Command="{Binding RefreshGridCommand}" ToolTip="Refresh Grid">
+            <fa:IconImage Icon="SyncAlt" Focusable="False"/>
+        </Button>
+        <Grid HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Height="20" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock  Text="{Binding SearchResultText}"  FontStyle="Italic" Grid.Column="0" Padding="5,0,5,0" Focusable="False"/>
+            <Button Background="Transparent"  IsTabStop="False" BorderThickness="0" Padding="5,0,5,0" HorizontalAlignment="Right" Grid.Column="1" Command="{Binding PreviousResultCommand}">
+                <fa:IconImage Icon="ChevronLeft" />
+            </Button>
+            <Button Background="Transparent" IsTabStop="False" BorderThickness="0" Padding="5,0,5,0" HorizontalAlignment="Right" Grid.Column="2" Command="{Binding NextResultCommand}">
+                <fa:IconImage Icon="ChevronRight" />
+            </Button>
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SearchResultText}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+        </Grid>
+        
+    </Grid>
+</UserControl>

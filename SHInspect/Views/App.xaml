@@ -1,0 +1,7 @@
+﻿<Application x:Class="SHInspect.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:SHInspect"
+             DispatcherUnhandledException="Application_DispatcherUnhandledException"
+             StartupUri="\Views\MainWindow.xaml">
+</Application>

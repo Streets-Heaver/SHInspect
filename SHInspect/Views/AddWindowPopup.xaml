@@ -1,0 +1,40 @@
+﻿<Window x:Class="SHInspect.Views.AddWindowPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SHInspect.Views"
+        mc:Ignorable="d" ResizeMode="NoResize" x:Name="PopupWindow"
+        Title="Add Window" Height="150" Width="400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition  Height="Auto" />
+            <RowDefinition  Height="Auto" />
+            <RowDefinition  Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Height="20" Background="LightGray" Text=" Automation Id" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Height="20" Background="LightGray" Text=" Name" />
+        <TextBox Grid.Row="1" Margin="0,0,0,10" Grid.Column="0" Height="20" IsReadOnly="True" Text="{Binding SelectedWindow.AutomationId}" />
+        <TextBox Grid.Row="1" Margin="0,0,0,10" Grid.Column="1" Height="20" IsReadOnly="True" Text="{Binding SelectedWindow.Name, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Grid.Column="0" Width="300" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" x:Name="WindowIdentifierBox" Padding="0" Text="{Binding SelectedWindow.Identifier}" />
+        <TextBlock Grid.Column="0" Width="300" Grid.ColumnSpan="2" Grid.Row="2"  IsHitTestVisible="False"  Text="Window Identifier"  Padding="5,0,0,0"  VerticalAlignment="Center" HorizontalAlignment="Stretch"  Foreground="DarkGray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=WindowIdentifierBox}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <Button Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5,2,0" HorizontalAlignment="Center" Width="200" Grid.Row="3" Command="{Binding AddWindowCommand}" CommandParameter="{Binding ElementName=PopupWindow}" Content="Add">
+        </Button>
+    </Grid>
+</Window>

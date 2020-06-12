@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="SHInspect.Controls.ImageButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SHInspect.Controls"
+             mc:Ignorable="d" x:Name="imageButton"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Button BorderThickness="0"  Command="{Binding Command, ElementName=imageButton}">
+            <Button.Content>
+                <Image Source="{Binding Image, ElementName=imageButton}" Height="{Binding ImageHeight, ElementName=imageButton}" Width="{Binding ImageWidth, ElementName=imageButton}" IsHitTestVisible="False"/>
+            </Button.Content>
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="Transparent"></Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightBlue"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+    </Grid>
+</UserControl>
