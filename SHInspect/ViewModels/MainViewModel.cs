@@ -454,7 +454,9 @@ namespace SHInspect.ViewModels
         {
             if (SelectedItemInTree != null)
             {
-                return SavedSettingsWindows.Any(x => x.Identifier == new WindowBO(SelectedItemInTree.AutomationElement, false).Identifier) && SelectedItemInTree.AutomationElement?.Parent != null && !SelectedItemInTree.AutomationElement.Parent.Equals(DesktopItem);
+                var rootItem = GetRootFromElement(SelectedItemInTree);
+                var newWindowBO = new WindowBO(rootItem, false);
+                return SavedSettingsWindows.Any(x => x.Identifier == newWindowBO.Identifier) && SelectedItemInTree.AutomationElement?.Parent != null && !SelectedItemInTree.AutomationElement.Parent.Equals(DesktopItem);
             }
             else
             {
