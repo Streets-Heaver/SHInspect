@@ -15,7 +15,7 @@ These display when right clicking an element in the visual tree.
 ### Shortcuts
 
 * CTRL + ALT - Inspection Mode (inspects under cursor)
-* CTRL + SHIFT + ALT - Quick window add (inspects under cursor)
+* CTRL + SHIFT + ALT - Quick window add (inspects under cursor, only appears for windows not already added)
 
 
 ![image](/SHInspect/Documentation/images/QuickAdd.PNG)

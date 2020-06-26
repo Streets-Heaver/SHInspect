@@ -12,7 +12,7 @@ In order to access the settings screen click the cog in the top left of the SHIn
 
 On this screen you can see your currently 'Active Windows' and your 'Windows To Display'. To manually add a window, first click on an active window. This will prefill the name and automation id of that window. This will preferentially use the window automation id and populate a text box below. This text box acts as an identifier so that SHInspect can find your window. Next click the add button to add your window.
 
-### Removing a window
+### Editing a window
 You can edit a windows identifier by selecting the window in 'Windows To Display' and changing the text in the text box.
 
 ### Deleting a window
