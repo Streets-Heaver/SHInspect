@@ -1,4 +1,4 @@
-![image](/SHInspect/Documentation/images/SHInspectIcon.PNG)
+![image](/SHInspect/Documentation/images/SHInspectIcon.PNG | width=128x)
 
 ## SHInspect
 
