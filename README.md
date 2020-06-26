@@ -1,4 +1,4 @@
-![image](/SHInspect/Resources/SHInspectIcon8.ICO)
+![image](/SHInspect/Resources/SHInspectIcon8.ico)
 
 ## SHInspect
 
