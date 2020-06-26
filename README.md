@@ -10,8 +10,8 @@ SHInspect is an element inspector for Win32 applications. SHInspect contains sev
 
 To begin using SHInspect you will need to add a Window using the Settings screen. Please find documentation below.
 
-* [Settings](https://github.com/Streets-Heaver/SHInspect/blob/main/SHInspect/Documentation/Settings.md)
+* [Setup & Settings](https://github.com/Streets-Heaver/SHInspect/blob/main/SHInspect/Documentation/Settings.md)
+* [Inspecting & Searching](https://github.com/Streets-Heaver/SHInspect/blob/main/SHInspect/Documentation/Searching.md)
 * [Properties/Patterns Panel](https://github.com/Streets-Heaver/SHInspect/blob/main/SHInspect/Documentation/PropertiesPatternsPanel.md)
-* [Searching](https://github.com/Streets-Heaver/SHInspect/blob/main/SHInspect/Documentation/Searching.md)
 * [Context Menu & Shortcuts](https://github.com/Streets-Heaver/SHInspect/blob/main/SHInspect/Documentation/ContextMenuShortcuts.md)
 * [Crash Window & Debugging](https://github.com/Streets-Heaver/SHInspect/blob/main/SHInspect/Documentation/Debugging.md)
