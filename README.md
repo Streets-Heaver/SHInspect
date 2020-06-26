@@ -1,4 +1,4 @@
-![image](/SHInspect/Documentation/images/SHInpsectIcon.png?raw=true)
+![image](/SHInspect/Documentation/images/SHInspectIcon.PNG)
 
 ## SHInspect
 
