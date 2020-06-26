@@ -4,6 +4,8 @@
 
 SHInspect is an element inspector for Win32 applications. SHInspect contains several features to allow for quick and simplified workflow such as searching, filtered windows, live updating, quick copy functions and useful shortcuts and context menu features to improve workflow.
 
+![image](/SHInspect/Documentation/images/Default.PNG)
+
 ### Documentation
 
 To begin using SHInspect you will need to add a Window using the Settings screen. Please find documentation below.
