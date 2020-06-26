@@ -1,3 +1,5 @@
+[Main Page](https://github.com/Streets-Heaver/SHInspect/blob/main/README.md)
+
 ## Setup & Settings Screen
 
 In order to begin using SHInspect you will need to add a window to view. This accepts either an automation id or the name (window title). These may be generated for you, although it is recommended to add an automation Id to your application especially if the window title can change.

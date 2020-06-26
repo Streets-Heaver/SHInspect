@@ -18,4 +18,4 @@ You can select a search type from the drop down. Currently available are 'Automa
 
 ### Traversing the visual tree
 
-The tree can be traversed by using the collapse/expand buttons on each item. There are also useful context menu options and shortcuts to make tree traversal easier. (see [here](https://github.com/Streets-Heaver/SHInspect/blob/main/SHInspect/Documentation/ContextMenuShortcuts.md)
+The tree can be traversed by using the collapse/expand buttons on each item. There are also useful context menu options and shortcuts to make tree traversal easier. (see [here](https://github.com/Streets-Heaver/SHInspect/blob/main/SHInspect/Documentation/ContextMenuShortcuts.md))
