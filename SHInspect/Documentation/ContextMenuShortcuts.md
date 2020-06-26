@@ -16,7 +16,10 @@ These display when right clicking an element in the visual tree.
 
 * CTRL + ALT - Inspection Mode (inspects under cursor)
 * CTRL + SHIFT + ALT - Quick window add (inspects under cursor)
+
+
 ![image](/SHInspect/Documentation/images/QuickAdd.PNG)
+
 This acts as a quick alternative to adding a window through the settings screen.
 * CTRL + F - Select search box
 * TAB - Moves to next selected item in search results
