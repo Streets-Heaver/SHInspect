@@ -9,8 +9,14 @@ The panel also features a auto/live refresh (triggered every second) and a manua
 ### Properties Panel
 ![image](/SHInspect/Documentation/images/Properties.PNG)
 
+The properties panel shows all properties on the element. It also feature a copy button to easily copy the properties value.
+
 ### Patterns Panel
 ![image](/SHInspect/Documentation/images/Patterns.PNG)
 
+The patterns panel shows all properties on the element. It also feature a copy button to easily copy the pattern value. When a pattern is supported on the element it appears in green with all values below. When the pattern is not supported it shows in red.
+
 ### Live Updating
-![image](/SHInspect/Documentation/images/EyeClosed.PNG)![image](/SHInspect/Documentation/images/EyeOpen.PNG)
+![image](/SHInspect/Documentation/images/EyeOpen.PNG)
+
+The eye icon enables/disables live updating. When live updating is turned on (red eye icon) the properties, patterns and image will live update. There is also a manual refresh button.
