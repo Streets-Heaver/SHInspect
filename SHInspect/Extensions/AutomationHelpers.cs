@@ -245,7 +245,7 @@ namespace SHInspect.Extensions
                 }
                 return details.OrderByDescending(x => x.IsSupported).ToList();
             }
-            catch (Exception ex) when (ex is OverflowException || ex is InvalidOperationException || ex is ArgumentException)
+            catch (Exception ex) when (ex is OverflowException || ex is InvalidOperationException || ex is ArgumentException || ex is UnauthorizedAccessException)
             {
                 return null;
             }
