@@ -2,6 +2,8 @@
 
 ## SHInspect
 
+[![Build status](https://dev.azure.com/Streets-Heaver/Automation/_apis/build/status/SHInspect%20GitHub)](https://dev.azure.com/Streets-Heaver/Automation/_build/latest?definitionId=194)
+
 SHInspect is an element inspector for Win32 applications. SHInspect contains several features to allow for quick and simplified workflow such as searching, filtered windows, live updating, quick copy functions and useful shortcuts and context menu features to improve workflow.
 
 ![image](/SHInspect/Documentation/images/Default.PNG)
