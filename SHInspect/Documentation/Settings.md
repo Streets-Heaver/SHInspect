@@ -2,7 +2,7 @@
 
 ## Setup & Settings Screen
 
-In order to begin using SHInspect you will need to add a window to view. This accepts either an automation id or the name (window title). These may be generated for you, although it is recommended to add an automation Id to your application especially if the window title can change.
+In order to begin using SHInspect you will need to add a window to view. This accepts either an automation ID or the name (window title). These may be generated for you, although it is recommended to add an automation ID to your application especially if the window title can change.
 
 In order to access the settings screen click the cog in the top left of the SHInspect application.
 
@@ -10,7 +10,7 @@ In order to access the settings screen click the cog in the top left of the SHIn
 
 ### Adding a window
 
-On this screen you can see your currently 'Active Windows' and your 'Windows To Display'. To manually add a window, first click on an active window. This will prefill the name and automation id of that window. This will preferentially use the window automation id and populate a text box below. This text box acts as an identifier so that SHInspect can find your window. Next click the add button to add your window.
+On this screen you can see your currently 'Active Windows' and your 'Windows To Display'. To manually add a window, first click on an active window. This will prefill the name and automation ID of that window. This will preferentially use the window automation ID and populate a text box below. This text box acts as an identifier so that SHInspect can find your window. Next click the add button to add your window.
 
 ### Editing a window
 You can edit a windows identifier by selecting the window in 'Windows To Display' and changing the text in the text box.
