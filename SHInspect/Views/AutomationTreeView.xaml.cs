@@ -38,6 +38,25 @@ namespace SHInspect.Views
             }
         }
 
+        private void TreeViewMouseEnterSelectedHandler(object sender, RoutedEventArgs e)
+        {
+            if ((DataContext as MainViewModel).HoverSelect)
+            {
+                var item = sender as ItemsControl;
+                this.Tag = item;
+                item.Focus();
+                if (item != null)
+                {
+                    item.BringIntoView();
+                    TreeViewItem treeItem = (item as TreeViewItem);
+                    if (!treeItem.IsExpanded)
+                    {
+                        treeItem.IsExpanded = true;
+                    }
+                    e.Handled = true;
+                }
+            }
+        }
 
 
         public object SelectedItem

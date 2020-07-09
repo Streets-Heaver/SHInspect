@@ -73,6 +73,7 @@ namespace SHInspect.ViewModels
             SavedSettingsWindows = new ObservableCollection<WindowBO>();
             var savedWins = Settings.Default.Windows;
             var inspectColour = Settings.Default.InspectionColour;
+            HoverSelect = Settings.Default.HoverSelect;
 
             SelectedColour = new System.Windows.Media.Color()
             {
@@ -312,6 +313,7 @@ namespace SHInspect.ViewModels
             var newCollection = new StringCollection();
             string[] wins = SavedSettingsWindows.Select(x => x.Identifier).ToArray();
             newCollection.AddRange(wins);
+            Settings.Default.HoverSelect = HoverSelect;
             Settings.Default.Windows = newCollection;
             Settings.Default.InspectionColour = System.Drawing.Color.FromArgb(SelectedColour.A, SelectedColour.R, SelectedColour.G, SelectedColour.B);
             Settings.Default.Save();

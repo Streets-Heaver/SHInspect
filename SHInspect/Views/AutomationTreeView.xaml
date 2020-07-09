@@ -55,6 +55,7 @@
                             <Setter Property="FontWeight" Value="Normal" />
                             <EventSetter Event="Selected" Handler="TreeViewSelectedHandler" />
                             <EventSetter Event="MouseDown" Handler="TreeViewSelectedHandler" />
+                            <EventSetter Event="MouseEnter" Handler="TreeViewMouseEnterSelectedHandler" />
                             <Style.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="FontWeight" Value="Bold" />

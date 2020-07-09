@@ -40,6 +40,7 @@ namespace SHInspect.ViewModels
         private ISHAutomationElement[] _searchResults;
         private int _currentSearchIndex;
         private System.Windows.Media.Color _selectedColour;
+        private bool _hoverSelect;
         private UIA3Automation _automation;
         private ImageSource _image;
         private bool _isLive;
@@ -266,6 +267,15 @@ namespace SHInspect.ViewModels
             set
             {
                 _selectedColour = value;
+                RaisePropertyChanged();
+            }
+        }
+        public bool HoverSelect
+        {
+            get { return _hoverSelect; }
+            set
+            {
+                _hoverSelect = value;
                 RaisePropertyChanged();
             }
         }

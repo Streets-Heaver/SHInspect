@@ -18,6 +18,10 @@ You can edit a windows identifier by selecting the window in 'Windows To Display
 ### Deleting a window
 You can remove a window by clicking a window in 'Windows To Display' and then pressing the delete button.
 
+### Select element With mouse over
+
+This option is useful when dealing with flyouts that close when clicking off the window. It auto selects and expands any element you hover over in the tree view. This make it easier to select a specific element.
+
 ### Changing the Inspection Colour
 
 The Inspection colour is the colour that shows when you are inspecting a control with your cursor whilst holding CTRL + ALT. You may wish to change this to stand out more with your application, for accessbility or for aesthetic purposes.

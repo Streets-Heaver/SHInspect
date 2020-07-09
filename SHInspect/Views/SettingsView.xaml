@@ -127,8 +127,9 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Inspection Colour:" HorizontalAlignment="Left" Padding="20,0,0,0" />
-            <xctk:ColorPicker Grid.Column="1" SelectedColor="{Binding SelectedColour,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" DisplayColorAndName="True" MinWidth="200"  Margin="10,0,0,0" HorizontalAlignment="Left" ShowStandardColors="False" ShowRecentColors="False"  ShowTabHeaders="False" />
+            <CheckBox Content="Select Element With Mouse Hover" ToolTip="Use this mode to manually select elements when clicking closes the element ie popups" Grid.Column="1" IsChecked="{Binding HoverSelect,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="10,0,0,0"/>
+            <TextBlock Text="Inspection Colour:" HorizontalAlignment="Right" Padding="20,0,0,0" Grid.Column="2"/>
+            <xctk:ColorPicker Grid.Column="3" SelectedColor="{Binding SelectedColour,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" DisplayColorAndName="True" MinWidth="200"  Margin="10,0,0,0" HorizontalAlignment="Left" ShowStandardColors="False" ShowRecentColors="False"  ShowTabHeaders="False" />
             
         </Grid>
         <Button Content="Test Crash" Margin="5" Grid.ColumnSpan="3" HorizontalAlignment="Center" Width="200" Grid.Row="4" Command="{Binding CrashWindowCommand}"/>
