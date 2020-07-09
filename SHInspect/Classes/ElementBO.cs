@@ -152,7 +152,7 @@ namespace SHInspect.Classes
 
         public string GetXPath()
         {
-            return Debug.GetXPathToElement(AutomationElement);
+            return XPathHelper.GetXPathToElement(AutomationElement);
         }
         public bool IsStillActive()
         {
