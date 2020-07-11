@@ -398,21 +398,6 @@ namespace SHInspect.ViewModels
                             xpath = $"//*[@{SelectedSearchTerm}='{SearchText}']";
                         }
                     }
-                    //else
-                    //{
-                    //    if (SelectedSearchTerm == SHInspectConstants.ControlType)
-                    //    {
-                    //        xpath = $"//{SearchText}";
-                    //    }
-                    //    else if (SelectedSearchTerm == "XPath")
-                    //    {
-                    //        xpath = SearchText;
-                    //    }
-                    //    else
-                    //    {
-                    //        xpath = $"//*[@{SelectedSearchTerm}='{SearchText}']";
-                    //    }
-                    //}
 
                     SearchResults = SelectedItemInTree.AutomationElement.FindAllByXPath(xpath);
                     if (SearchResults.Any())
@@ -433,8 +418,10 @@ namespace SHInspect.ViewModels
 
         public void CopyXPath()
         {
-            string copy = SelectedItemInTree.GetXPath();
-            Clipboard.SetText(copy);
+            string xpath = SelectedItemInTree.GetXPath();
+            var segments = xpath.Split('/').ToList();
+            segments.RemoveRange(0, 2);
+            Clipboard.SetText(string.Join('/', segments));
         }
         public void GoToParent()
         {
