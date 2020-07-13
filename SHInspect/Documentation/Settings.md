@@ -26,5 +26,9 @@ This option is useful when dealing with flyouts that close when clicking off the
 
 The Inspection colour is the colour that shows when you are inspecting a control with your cursor whilst holding CTRL + ALT. You may wish to change this to stand out more with your application, for accessbility or for aesthetic purposes.
 
+### Temporary Windows
+
+When a window is temporary it only shown in the element hierachy until the application is closed.
+
 ### Test Crash
 The test crash button is also available from within the settings screen. This button is only enabled when running SHInspect in debug mode and will generate a test crash. This is useful for tweaking the test crash window.
