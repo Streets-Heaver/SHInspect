@@ -15,9 +15,10 @@ namespace SHInspect.Classes
 {
     public class ElementBO : BaseNotify
     {
-        public ElementBO(SHAutomationElement automationElement)
+        public ElementBO(SHAutomationElement automationElement, bool isTemporary)
         {
             AutomationElement = automationElement;
+            IsTemporary = isTemporary;
             Children = new List<ElementBO>();
             ItemDetails = new List<DetailBO>();
         }
@@ -41,6 +42,17 @@ namespace SHInspect.Classes
             }
         }
 
+        private bool _isTemporary;
+        public bool IsTemporary
+        {
+            get { return _isTemporary; }
+            set
+            {
+                _isTemporary = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private bool _IsExpanded;
         public bool IsExpanded
         {
@@ -61,16 +73,6 @@ namespace SHInspect.Classes
             }
         }
 
-        private bool _isRoot;
-        public bool IsRoot
-        {
-            get { return _isRoot; }
-            set
-            {
-                _isRoot = value;
-                RaisePropertyChanged();
-            }
-        }
         public static ElementBO Find(ElementBO node, string name, string searchMode)
         {
             if (node == null)
@@ -177,8 +179,7 @@ namespace SHInspect.Classes
 
                 foreach (var child in AutomationElement.FindAll(TreeScope.Children, new BoolCondition(true), timeout: 0))
                 {
-                    var childViewModel = new ElementBO((SHAutomationElement)child);
-                    //childViewModel.SelectionChanged += SelectionChanged;
+                    var childViewModel = new ElementBO((SHAutomationElement)child,IsTemporary);
                     childrenViewModels.Add(childViewModel);
                     if (loadInnerChildren)
                     {

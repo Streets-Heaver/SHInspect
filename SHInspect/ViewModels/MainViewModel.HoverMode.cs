@@ -65,7 +65,7 @@ namespace SHInspect.ViewModels
                         });
                         var screenPos = Mouse.Position;
                         var hov = Automation.FromPoint(screenPos);
-                        ElementBO hoveredElement = hov != null ? new ElementBO(hov) : null;
+                        ElementBO hoveredElement = hov != null ? new ElementBO(hov,false) : null;
                         var win = hoveredElement != null ?  GetRootFromElement(hoveredElement) : null;
                         if(win == null)
                         {

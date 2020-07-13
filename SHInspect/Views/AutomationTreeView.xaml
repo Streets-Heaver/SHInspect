@@ -53,17 +53,29 @@
                             <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                             <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                             <Setter Property="FontWeight" Value="Normal" />
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Background" Value="Transparent" />
                             <EventSetter Event="Selected" Handler="TreeViewSelectedHandler" />
                             <EventSetter Event="MouseDown" Handler="TreeViewSelectedHandler" />
                             <EventSetter Event="MouseEnter" Handler="TreeViewMouseEnterSelectedHandler" />
                             <Style.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="Background" Value="Blue" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="#efefef"/>
                                 </Trigger>
-
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsTemporary}" Value="True" />
+                                        <Condition Binding="{Binding IsSelected}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.Setters>
+                                        <Setter Property="Foreground" Value="Red" />
+                                    </MultiDataTrigger.Setters>
+                                </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
                     </TreeView.ItemContainerStyle>
