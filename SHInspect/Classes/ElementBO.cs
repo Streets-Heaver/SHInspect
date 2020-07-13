@@ -15,9 +15,10 @@ namespace SHInspect.Classes
 {
     public class ElementBO : BaseNotify
     {
-        public ElementBO(SHAutomationElement automationElement)
+        public ElementBO(SHAutomationElement automationElement, bool isTemporary)
         {
             AutomationElement = automationElement;
+            IsTemporary = isTemporary;
             Children = new List<ElementBO>();
             ItemDetails = new List<DetailBO>();
         }
@@ -41,6 +42,17 @@ namespace SHInspect.Classes
             }
         }
 
+        private bool _isTemporary;
+        public bool IsTemporary
+        {
+            get { return _isTemporary; }
+            set
+            {
+                _isTemporary = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private bool _IsExpanded;
         public bool IsExpanded
         {
@@ -61,63 +73,7 @@ namespace SHInspect.Classes
             }
         }
 
-        private bool _isRoot;
-        public bool IsRoot
-        {
-            get { return _isRoot; }
-            set
-            {
-                _isRoot = value;
-                RaisePropertyChanged();
-            }
-        }
-        public static ElementBO Find(ElementBO node, string name, string searchMode)
-        {
-            if (node == null)
-                return null;
-
-
-            node.IsExpanded = true;
-            if (searchMode == SHInspectConstants.AutomationId)
-            {
-                if (node.AutomationId != null && node.AutomationId.StartsWith(name))
-                    return node;
-                else
-                {
-                    foreach (var child in node.Children)
-                    {
-                        if (child.AutomationId != null && child.AutomationId.StartsWith(name))
-                            return child;
-
-                        var found = Find(child, name, searchMode);
-                        if (found != null)
-                            return found;
-                    }
-                }
-            }
-            else
-            {
-                if (node.Name != null && node.Name.StartsWith(name))
-                    return node;
-                else
-                {
-                    foreach (var child in node.Children)
-                    {
-                        if (child.Name != null && child.Name.StartsWith(name))
-                            return child;
-
-                        var found = Find(child, name, searchMode);
-                        if (found != null)
-                            return found;
-                    }
-                }
-            }
-
-
-            return null;
-
-        }
-
+       
         public string Text => StringExtensions.NormalizeString(AutomationElement.AsTextBox().Text);
         public string Name => StringExtensions.NormalizeString(AutomationElement.Properties.Name.ValueOrDefault);
         public bool IsGridRecord => StringExtensions.NormalizeString(AutomationElement.Properties.Name.ValueOrDefault).Contains("Item:");
@@ -177,8 +133,7 @@ namespace SHInspect.Classes
 
                 foreach (var child in AutomationElement.FindAll(TreeScope.Children, new BoolCondition(true), timeout: 0))
                 {
-                    var childViewModel = new ElementBO((SHAutomationElement)child);
-                    //childViewModel.SelectionChanged += SelectionChanged;
+                    var childViewModel = new ElementBO((SHAutomationElement)child,IsTemporary);
                     childrenViewModels.Add(childViewModel);
                     if (loadInnerChildren)
                     {

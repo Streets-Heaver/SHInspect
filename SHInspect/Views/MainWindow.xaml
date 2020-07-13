@@ -26,6 +26,20 @@
         <controls:SearchBox SearchCommand="{Binding SearchCommand}" SearchText="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                             SearchTerms="{Binding SearchTerms}" SelectedSearchTerm="{Binding SelectedSearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             PlaceHolderText="Search for something..." Grid.Column="0" Grid.Row="0" FontSize="15"  HorizontalAlignment="Stretch"/>
+        <Button HorizontalAlignment="Right"  Height="30" Width="30" IsTabStop="False" Focusable="False" Background="Transparent" Margin="0,0,10,0"  BorderThickness="0" Grid.Row="0" Grid.Column="3"  Command="{Binding RefreshWindowsCommand}" ToolTip="Refresh Active Windows">
+            <fa:IconImage Icon="SyncAlt" Focusable="False"/>
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSettings}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+                
+            </Button.Style>
+        </Button>
         <views:SettingsView Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
             <views:SettingsView.Style>
                 <Style TargetType="views:SettingsView">
