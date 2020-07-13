@@ -9,6 +9,7 @@
     <Authors>Tom Poucher</Authors>
     <Company>Streets Heaver</Company>
     <Description>Inspector for UI elements.</Description>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>

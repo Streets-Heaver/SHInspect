@@ -73,53 +73,7 @@ namespace SHInspect.Classes
             }
         }
 
-        public static ElementBO Find(ElementBO node, string name, string searchMode)
-        {
-            if (node == null)
-                return null;
-
-
-            node.IsExpanded = true;
-            if (searchMode == SHInspectConstants.AutomationId)
-            {
-                if (node.AutomationId != null && node.AutomationId.StartsWith(name))
-                    return node;
-                else
-                {
-                    foreach (var child in node.Children)
-                    {
-                        if (child.AutomationId != null && child.AutomationId.StartsWith(name))
-                            return child;
-
-                        var found = Find(child, name, searchMode);
-                        if (found != null)
-                            return found;
-                    }
-                }
-            }
-            else
-            {
-                if (node.Name != null && node.Name.StartsWith(name))
-                    return node;
-                else
-                {
-                    foreach (var child in node.Children)
-                    {
-                        if (child.Name != null && child.Name.StartsWith(name))
-                            return child;
-
-                        var found = Find(child, name, searchMode);
-                        if (found != null)
-                            return found;
-                    }
-                }
-            }
-
-
-            return null;
-
-        }
-
+       
         public string Text => StringExtensions.NormalizeString(AutomationElement.AsTextBox().Text);
         public string Name => StringExtensions.NormalizeString(AutomationElement.Properties.Name.ValueOrDefault);
         public bool IsGridRecord => StringExtensions.NormalizeString(AutomationElement.Properties.Name.ValueOrDefault).Contains("Item:");
