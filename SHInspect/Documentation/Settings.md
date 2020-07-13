@@ -26,6 +26,10 @@ This option is useful when dealing with flyouts that close when clicking off the
 
 The Inspection colour is the colour that shows when you are inspecting a control with your cursor whilst holding CTRL + ALT. You may wish to change this to stand out more with your application, for accessbility or for aesthetic purposes.
 
+### Refresh Active Windows
+
+Pressing the refresh button updates your current active windows, for example any windows opened/closed since you opened the settings screen.
+
 ### Temporary Windows
 
 When a window is temporary it only shown in the element hierachy until the application is closed.
