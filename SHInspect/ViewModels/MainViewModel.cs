@@ -108,14 +108,14 @@ namespace SHInspect.ViewModels
             CurrentSearchIndex = 0;
             _treeWalker = _automation.TreeWalkerFactory.GetControlViewWalker();
             DesktopItem = item != null ? item : null;
-            var items = DesktopItem.FindAllByXPath("*").Select(x => new ElementBO(new SHAutomationElement(x.FrameworkAutomationElement)));
+            var items = DesktopItem.FindAllByXPath("/child::*");
             foreach (var win in items)
             {
                 if (SavedSettingsWindows.Any(x => (!string.IsNullOrEmpty(win.AutomationId?.Trim()) && win.AutomationId.StartsWith(x.Identifier)) || (!string.IsNullOrEmpty(win.Name?.Trim()) && win.Name.StartsWith(x.Identifier))))
                 {
-                    if (!Elements.Any(x => x.AutomationElement.Equals(win.AutomationElement)))
+                    if (!Elements.Any(x => x.AutomationElement.Equals(win)))
                     {
-                        Elements.Add(win);
+                        Elements.Add(new ElementBO(new SHAutomationElement(win.FrameworkAutomationElement)));
                         Elements.ToList().ForEach(x => x.IsExpanded = true);
                     }
                 }

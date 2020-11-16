@@ -120,7 +120,6 @@ namespace SHInspect.Classes
 
         public string Text => StringExtensions.NormalizeString(AutomationElement.AsTextBox().Text);
         public string Name => StringExtensions.NormalizeString(AutomationElement.Properties.Name.ValueOrDefault);
-        public bool IsGridRecord => StringExtensions.NormalizeString(AutomationElement.Properties.Name.ValueOrDefault).Contains("Item:");
         public string AutomationId => StringExtensions.NormalizeString(AutomationElement.Properties.AutomationId.ValueOrDefault);
         public string HelpText => StringExtensions.NormalizeString(AutomationElement.Properties.HelpText.ValueOrDefault);
         public ControlType ControlType => AutomationElement.Properties.ControlType.TryGetValue(out ControlType value) ? value : SHAutomation.Core.Definitions.ControlType.Custom;
