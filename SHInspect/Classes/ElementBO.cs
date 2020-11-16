@@ -2,6 +2,7 @@
 using SHAutomation.Core.AutomationElements;
 using SHAutomation.Core.Conditions;
 using SHAutomation.Core.Definitions;
+using SHAutomation.Core.Exceptions;
 using SHInspect.Classes;
 using SHInspect.Constants;
 using SHInspect.Extensions;
@@ -157,10 +158,10 @@ namespace SHInspect.Classes
         {
             try
             {
-                AutomationElement.GetHashCode();
+            //   var p = AutomationElement.FrameworkAutomationElement.BoundingRectangle.Value;
                 return true;
             }
-            catch(COMException)
+            catch(Exception ex) when (ex is COMException || ex is PropertyNotSupportedException)
             {
                 //thrown when item no longer exists
                 return false;

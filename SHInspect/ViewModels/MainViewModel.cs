@@ -97,7 +97,7 @@ namespace SHInspect.ViewModels
             GetDesktop();
             PropertyChangedEventManager.AddHandler(this, SelectedItemChanged, nameof(SelectedItemInTree));
         }
-        public List<SHAutomationElement> GetDesktopItems()
+        public List<SHAutomationElement> GetDesktopItems(bool isMainView = true)
         {
             var items = new List<SHAutomationElement>();
             var firstChild = _treeWalker.GetFirstChild(DesktopItem as SHAutomationElement);
@@ -126,36 +126,38 @@ namespace SHInspect.ViewModels
 
                 }
             }
+            if (isMainView)
+            {
+                Properties = null;
+                Patterns = null;
+                Image = null;
+                Elements = new ObservableCollection<ElementBO>();
+                foreach (var win in items)
+                {
+                    if (SavedSettingsWindows.Any(x => (!string.IsNullOrEmpty(win.AutomationId?.Trim()) && win.AutomationId.StartsWith(x.Identifier)) || (!string.IsNullOrEmpty(win.Name?.Trim()) && win.Name.StartsWith(x.Identifier))))
+                    {
+                        if (!Elements.Any(x => x.AutomationElement.Equals(win)))
+                        {
+                            Elements.Add(new ElementBO(new SHAutomationElement(win.FrameworkAutomationElement)));
+                            Elements.ToList().ForEach(x => x.IsExpanded = true);
+                        }
+                    }
+                }
+                if (Elements.Any())
+                {
+                    SelectedItem = Elements.First();
+                }
+            }
             return items;
         }
         public void GetDesktop()
         {
-            Properties = null;
-            Patterns = null;
-            Image = null;
-            Elements = new ObservableCollection<ElementBO>();
             var item = _automation.GetDesktop();
             SearchResults = new ISHAutomationElement[0];
             CurrentSearchIndex = 0;
             _treeWalker = _automation.TreeWalkerFactory.GetControlViewWalker();
             DesktopItem = item != null ? item : null;
-            var items = GetDesktopItems();
-            foreach (var win in items)
-            {
-                if (SavedSettingsWindows.Any(x => (!string.IsNullOrEmpty(win.AutomationId?.Trim()) && win.AutomationId.StartsWith(x.Identifier)) || (!string.IsNullOrEmpty(win.Name?.Trim()) && win.Name.StartsWith(x.Identifier))))
-                {
-                    if (!Elements.Any(x => x.AutomationElement.Equals(win)))
-                    {
-                        Elements.Add(new ElementBO(new SHAutomationElement(win.FrameworkAutomationElement)));
-                        Elements.ToList().ForEach(x => x.IsExpanded = true);
-                    }
-                }
-            }
-            if (Elements.Any())
-            {
-                SelectedItem = Elements.First();
-            }
-
+            GetDesktopItems();
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += DispatcherTimerTick;
             _dispatcherTimer.Interval = TimeSpan.FromMilliseconds(1);
@@ -168,11 +170,15 @@ namespace SHInspect.ViewModels
 
         void SelectedItemChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (SelectedItemInTree?.AutomationElement?.FrameworkAutomationElement == null)
+            if(SelectedItem?.AutomationElement?.FrameworkAutomationElement == null && SelectedItemInTree?.AutomationElement?.FrameworkAutomationElement == null)
             {
                 return;
             }
-            else if ((SelectedItem != null && !SelectedItemInTree.IsStillActive()) || GetRootFromElement(SelectedItemInTree) == null)
+            else if (SelectedItemInTree?.AutomationElement?.FrameworkAutomationElement == null)
+            {
+                return;
+            }
+            else if ((!SelectedItemInTree.IsStillActive()) || GetRootFromElement(SelectedItemInTree) == null)
             {
                 GetDesktop();
             }
@@ -190,8 +196,11 @@ namespace SHInspect.ViewModels
                 return;
             }
             ImageSource img = null;
-            var newProperties = SelectedItemInTree != null ? AutomationHelpers.GetElementDetailViewModelProperties(SelectedItemInTree.AutomationElement, out img) : null;
-
+            var newProperties = SelectedItemInTree?.AutomationElement?.FrameworkAutomationElement != null ? AutomationHelpers.GetElementDetailViewModelProperties(SelectedItemInTree.AutomationElement, out img) : null;
+            if(newProperties == null || !newProperties.Any())
+            {
+                GetDesktop();
+            }
             Image = img;
 
             if (Properties != null && newProperties != null)
@@ -330,7 +339,7 @@ namespace SHInspect.ViewModels
             IdentifierToAdd = null;
             if (DesktopItem != null && IsSettings)
             {
-                SettingsWindowList = GetDesktopItems().Where(x => !string.IsNullOrEmpty(x.Name?.Trim()) || !string.IsNullOrEmpty(x.AutomationId?.Trim())).Select(x => new WindowBO(x, true)).ToList();
+                SettingsWindowList = GetDesktopItems(false).Where(x => !string.IsNullOrEmpty(x.Name?.Trim()) || !string.IsNullOrEmpty(x.AutomationId?.Trim())).Select(x => new WindowBO(x, true)).ToList();
             }
             else
             {
