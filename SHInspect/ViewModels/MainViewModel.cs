@@ -108,39 +108,82 @@ namespace SHInspect.ViewModels
             Patterns = null;
             Image = null;
             Elements = new ObservableCollection<ElementBO>();
-            var item = _automation.GetDesktop();
             SearchResults = new ISHAutomationElement[0];
             CurrentSearchIndex = 0;
             _treeWalker = _automation.TreeWalkerFactory.GetControlViewWalker();
-            DesktopItem = item != null ? item : null;
-            var items = DesktopItem.FindAllByXPath("*").Select(x => new ElementBO(new SHAutomationElement(x.FrameworkAutomationElement),false));
-            foreach (var win in items)
-            {
-                if (SavedSettingsWindows.Any(x => (!string.IsNullOrEmpty(win.AutomationId?.Trim()) && win.AutomationId.StartsWith(x.Identifier)) || (!string.IsNullOrEmpty(win.Name?.Trim()) && win.Name.StartsWith(x.Identifier))))
-                {
-                    var savedItem = SavedSettingsWindows.First(x => (!string.IsNullOrEmpty(win.AutomationId?.Trim()) && win.AutomationId.StartsWith(x.Identifier)) || (!string.IsNullOrEmpty(win.Name?.Trim()) && win.Name.StartsWith(x.Identifier)));
-                    if (!Elements.Any(x => x.AutomationElement.Equals(win.AutomationElement)))
-                    {
-                        win.IsTemporary = savedItem.IsTemporary;
-                        if(win.IsTemporary)
-                        {
-                            win.Children.Clear();
-                            win.LoadChildren(true);
-                        }
-                        Elements.Add(win);
-                        Elements.ToList().ForEach(x => x.IsExpanded = true);
-                    }
-                }
-            }
-            if (Elements.Any())
-            {
-                SelectedItem = Elements.First();
-            }
-
+            GetDesktopItems();
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Tick += DispatcherTimerTick;
             _dispatcherTimer.Interval = TimeSpan.FromMilliseconds(1);
             _dispatcherTimer.Start();
+        }
+
+        public List<ElementBO> GetDesktopItems(bool isMainView = true)
+        {
+            DesktopItem ??= _automation.GetDesktop();
+
+            var items = new List<ElementBO>();
+            var child = _treeWalker.GetFirstChild(DesktopItem as SHAutomationElement);
+            var firstChild = child != null ? new ElementBO(child, false, null) : null;
+
+            if (firstChild != null)
+            {
+                items.Add(firstChild);
+                var previousSibling = firstChild;
+
+                bool finishedLooping = false;
+                while (!finishedLooping)
+                {
+                    var sibling = _treeWalker.GetNextSibling(previousSibling.AutomationElement);
+                    previousSibling = sibling != null ? new ElementBO(sibling, false, null) : null;
+                    if (previousSibling == null)
+                    {
+                        finishedLooping = true;
+                    }
+                    else
+                    {
+                        items.Add(previousSibling);
+                        if (previousSibling.Name == "Program Manager")
+                        {
+                            finishedLooping = true;
+                        }
+                    }
+
+                }
+            }
+            if (isMainView)
+            {
+                {
+                    Properties = null;
+                    Patterns = null;
+                    Image = null;
+                    Elements = new ObservableCollection<ElementBO>();
+                    foreach (var win in items)
+                    {
+                        if (SavedSettingsWindows.Any(x => (!string.IsNullOrEmpty(win.AutomationId?.Trim()) && win.AutomationId.StartsWith(x.Identifier)) || (!string.IsNullOrEmpty(win.Name?.Trim()) && win.Name.StartsWith(x.Identifier))))
+                        {
+                            var savedItem = SavedSettingsWindows.First(x => (!string.IsNullOrEmpty(win.AutomationId?.Trim()) && win.AutomationId.StartsWith(x.Identifier)) || (!string.IsNullOrEmpty(win.Name?.Trim()) && win.Name.StartsWith(x.Identifier)));
+                            if (!Elements.Any(x => x.AutomationElement.Equals(win.AutomationElement)))
+                            {
+                                win.IsTemporary = savedItem.IsTemporary;
+                                if (win.IsTemporary)
+                                {
+                                    win.Children.Clear();
+                                    win.LoadChildren(true);
+                                }
+                                Elements.Add(win);
+                                Elements.ToList().ForEach(x => x.IsExpanded = true);
+                                Elements.ToList().ForEach(x => x.RootElement = x.AutomationElement);
+                            }
+                        }
+                    }
+                    if (Elements.Any())
+                    {
+                        SelectedItem = Elements.First();
+                    }
+                }
+            }
+            return items;
         }
         ~MainViewModel()
         {
@@ -149,18 +192,21 @@ namespace SHInspect.ViewModels
 
         void SelectedItemChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (SelectedItemInTree == null)
+            if (SelectedItem?.AutomationElement?.FrameworkAutomationElement == null && SelectedItemInTree?.AutomationElement?.FrameworkAutomationElement == null)
             {
                 return;
             }
-            else if (!SelectedItemInTree.IsStillActive() || GetRootFromElement(SelectedItemInTree) == null)
+            else if (SelectedItemInTree?.AutomationElement?.FrameworkAutomationElement == null)
+            {
+                return;
+            }
+            else if (GetRootFromElement(SelectedItemInTree) == null)
             {
                 GetDesktop();
             }
 
             RefreshItemDetails();
         }
-
         void RefreshItemDetails()
         {
             if (!Elements.Any() || SelectedItemInTree == null)
@@ -171,8 +217,11 @@ namespace SHInspect.ViewModels
                 return;
             }
             ImageSource img = null;
-            var newProperties = SelectedItemInTree != null ? AutomationHelpers.GetElementDetailViewModelProperties(SelectedItemInTree.AutomationElement, out img) : null;
-
+            var newProperties = SelectedItemInTree?.AutomationElement?.FrameworkAutomationElement != null ? AutomationHelpers.GetElementDetailViewModelProperties(SelectedItemInTree.AutomationElement, out img) : null;
+            if (newProperties == null || !newProperties.Any())
+            {
+                GetDesktop();
+            }
             Image = img;
 
             if (Properties != null && newProperties != null)
@@ -190,6 +239,7 @@ namespace SHInspect.ViewModels
                 Patterns = SelectedItemInTree != null ? AutomationHelpers.GetElementDetailViewModelPatterns(SelectedItemInTree.AutomationElement) : null;
             }
         }
+
 
         bool CanCopyValue(string value)
         {
@@ -311,7 +361,7 @@ namespace SHInspect.ViewModels
             IdentifierToAdd = null;
             if (DesktopItem != null && IsSettings)
             {
-                var windows = DesktopItem.FindAllByXPath("*").Where(x => !string.IsNullOrEmpty(x.Name?.Trim()) || !string.IsNullOrEmpty(x.AutomationId?.Trim())).Select(x => new WindowBO(x, true)).ToList();
+                var windows = GetDesktopItems(false).Where(x => !string.IsNullOrEmpty(x.Name?.Trim()) || !string.IsNullOrEmpty(x.AutomationId?.Trim())).Select(x => new WindowBO(x.AutomationElement, true)).ToList();
                 SettingsWindowList = windows.Where(x => !SavedSettingsWindows.Any(xx => xx.Identifier == x.Identifier)).ToList();
             }
             else
@@ -386,7 +436,7 @@ namespace SHInspect.ViewModels
             {
                 CurrentSearchIndex = SearchResults.Count() - 1;
             }
-            SelectedItem = new ElementBO(SearchResults[CurrentSearchIndex] as SHAutomationElement, SelectedItemInTree.IsTemporary);
+            SelectedItem = new ElementBO(SearchResults[CurrentSearchIndex] as SHAutomationElement, SelectedItemInTree.IsTemporary, SelectedItemInTree.RootElement);
         }
         public async void Search()
         {
@@ -417,7 +467,7 @@ namespace SHInspect.ViewModels
                     SearchResults = SelectedItemInTree.AutomationElement.FindAllByXPath(xpath);
                     if (SearchResults.Any())
                     {
-                        SelectedItem = new ElementBO(SearchResults[0] as SHAutomationElement, SelectedItemInTree.IsTemporary);
+                        SelectedItem = new ElementBO(SearchResults[0] as SHAutomationElement, SelectedItemInTree.IsTemporary, SelectedItemInTree.RootElement);
                     }
 
                 }
@@ -433,14 +483,14 @@ namespace SHInspect.ViewModels
 
         public void CopyXPath()
         {
-            string xpath = SelectedItemInTree.GetXPath();
+            string xpath = SelectedItemInTree.GetXPath(GetRootFromElement(SelectedItemInTree) as SHAutomationElement);
             var segments = xpath.Split('/').ToList();
             segments.RemoveRange(0, 2);
             Clipboard.SetText(string.Join('/', segments));
         }
         public void GoToParent()
         {
-            SelectedItem = new ElementBO(SelectedItemInTree.AutomationElement.Parent as SHAutomationElement, SelectedItemInTree.IsTemporary);
+            SelectedItem = new ElementBO(SelectedItemInTree.AutomationElement.Parent as SHAutomationElement, SelectedItemInTree.IsTemporary, SelectedItemInTree.RootElement);
         }
         public bool CanGoToParent()
         {
@@ -452,13 +502,13 @@ namespace SHInspect.ViewModels
             {
                 return;
             }
-            SelectedItem = new ElementBO(GetRootFromElement(SelectedItemInTree) as SHAutomationElement, SelectedItemInTree.IsTemporary);
+            SelectedItem = new ElementBO(SelectedItemInTree.RootElement, SelectedItemInTree.IsTemporary, SelectedItemInTree.RootElement);// new ElementBO(GetRootFromElement(SelectedItemInTree) as SHAutomationElement, SelectedItemInTree.IsTemporary,SelectedItemInTree.RootElement);
         }
         public bool CanGoToRoot()
         {
             if (SelectedItemInTree != null)
             {
-                var rootItem = GetRootFromElement(SelectedItemInTree);
+                var rootItem = GetRootFromElement(SelectedItemInTree);//GetRootFromElement(SelectedItemInTree);
                 var newWindowBO = new WindowBO(rootItem, false);
                 return SavedSettingsWindows.Any(x => x.Identifier == newWindowBO.Identifier) && SelectedItemInTree.AutomationElement?.Parent != null && !SelectedItemInTree.AutomationElement.Parent.Equals(DesktopItem);
             }
@@ -524,19 +574,45 @@ namespace SHInspect.ViewModels
         }
         public ISHAutomationElement GetRootFromElement(ElementBO element)
         {
-            try
+            if (element.RootElement == null)
             {
-                ISHAutomationElement win = Automation.GetParent(element.AutomationElement, x => x.ByControlType(ControlType.Window).And(x.ByClassName(SHInspectConstants.Popup).Not()));
-                if (win?.Parent != null && !win.Parent.Equals(DesktopItem))
+                var id = element?.AutomationElement?.ProcessId ?? -1;
+                if(id < 0)
                 {
-                    win = win.Parent;
+                    return null;
                 }
-                return win;
+                var root = Elements.FirstOrDefault(x => x.AutomationElement.ProcessId == id);
+
+                if(root != null)
+                {
+                    return root.AutomationElement;
+                }
+                else
+                {
+                    try
+                    {
+                        if (element?.AutomationElement?.Parent != null && element.AutomationElement.Parent.Equals(DesktopItem))
+                        {
+                            return element.AutomationElement;
+                        }
+                        ISHAutomationElement win = Automation.GetParent(element.AutomationElement, x => x.ByControlType(ControlType.Window).And(x.ByClassName(SHInspectConstants.Popup).Not()));
+                        if (win?.Parent != null && !win.Parent.Equals(DesktopItem))
+                        {
+                            win = win.Parent;
+                        }
+                        return win;
+                    }
+                    catch (COMException)
+                    {
+                        return null;
+                    }
+                }
             }
-            catch (COMException)
+            else
             {
-                return null;
+                return element.RootElement;
             }
+       
         }
     }
 }

@@ -15,14 +15,15 @@ namespace SHInspect.Classes
 {
     public class ElementBO : BaseNotify
     {
-        public ElementBO(SHAutomationElement automationElement, bool isTemporary)
+        public ElementBO(SHAutomationElement automationElement, bool isTemporary, SHAutomationElement rootElement)
         {
             AutomationElement = automationElement;
             IsTemporary = isTemporary;
             Children = new List<ElementBO>();
             ItemDetails = new List<DetailBO>();
+            RootElement = rootElement;
         }
-
+        public SHAutomationElement RootElement;
         public SHAutomationElement AutomationElement { get; }
 
         private bool _isSelected;
@@ -76,7 +77,6 @@ namespace SHInspect.Classes
        
         public string Text => StringExtensions.NormalizeString(AutomationElement.AsTextBox().Text);
         public string Name => StringExtensions.NormalizeString(AutomationElement.Properties.Name.ValueOrDefault);
-        public bool IsGridRecord => StringExtensions.NormalizeString(AutomationElement.Properties.Name.ValueOrDefault).Contains("Item:");
         public string AutomationId => StringExtensions.NormalizeString(AutomationElement.Properties.AutomationId.ValueOrDefault);
         public string HelpText => StringExtensions.NormalizeString(AutomationElement.Properties.HelpText.ValueOrDefault);
         public ControlType ControlType => AutomationElement.Properties.ControlType.TryGetValue(out ControlType value) ? value : SHAutomation.Core.Definitions.ControlType.Custom;
@@ -106,34 +106,20 @@ namespace SHInspect.Classes
             }
         }
 
-        public string GetXPath()
+        public string GetXPath(SHAutomationElement root = null)
         {
-            return XPathHelper.GetXPathToElement(AutomationElement);
-        }
-        public bool IsStillActive()
-        {
-            try
-            {
-                string xpath = GetXPath();
-                return xpath != string.Empty;
-            }
-            catch(COMException)
-            {
-                //thrown when item no longer exists
-                return false;
-            }
+            return XPathHelper.GetXPathToElement(AutomationElement,root);
         }
 
         public void LoadChildren(bool loadInnerChildren)
         {
             if (AutomationElement != null)
             {
-               
                 var childrenViewModels = new List<ElementBO>();
 
-                foreach (var child in AutomationElement.FindAll(TreeScope.Children, new BoolCondition(true), timeout: 0))
+                foreach (var child in AutomationElement.FindAll(TreeScope.Children, new BoolCondition(true), timeout: TimeSpan.Zero))
                 {
-                    var childViewModel = new ElementBO((SHAutomationElement)child,IsTemporary);
+                    var childViewModel = new ElementBO((SHAutomationElement)child,IsTemporary,RootElement);
                     childrenViewModels.Add(childViewModel);
                     if (loadInnerChildren)
                     {
