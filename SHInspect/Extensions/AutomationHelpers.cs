@@ -28,120 +28,127 @@ namespace SHInspect.Extensions
         {
             image = null;
             List<DetailBO> details = new List<DetailBO>();
-            var items = element.GetSupportedPropertiesDirect().Where(x => x.Id != 0 && !x.Name.Contains("Available")).ToList();
+            try
+            {
+                var items = element.GetSupportedPropertiesDirect().Where(x => x.Id != 0 && !x.Name.Contains("Available")).ToList();
 
-            if (items.Any(x => x.Name == SHInspectConstants.AutomationId))
-            {
-                var item = items.First(x => x.Name == SHInspectConstants.AutomationId);
-                items.Remove(item);
-                var output = GetPropertyValueHandled(element, item);
-                if (output != null)
+                if (items.Any(x => x.Name == SHInspectConstants.AutomationId))
                 {
-                    details.Add(new DetailBO(item.Name, output?.ToString()));
+                    var item = items.First(x => x.Name == SHInspectConstants.AutomationId);
+                    items.Remove(item);
+                    var output = GetPropertyValueHandled(element, item);
+                    if (output != null)
+                    {
+                        details.Add(new DetailBO(item.Name, output?.ToString()));
+                    }
                 }
-            }
-            if (items.Any(x => x.Name == SHInspectConstants.Name))
-            {
-                var item = items.First(x => x.Name == SHInspectConstants.Name);
-                items.Remove(item);
-                var output = GetPropertyValueHandled(element, item);
-                if (output != null)
+                if (items.Any(x => x.Name == SHInspectConstants.Name))
                 {
-                    details.Add(new DetailBO(item.Name, output?.ToString()));
+                    var item = items.First(x => x.Name == SHInspectConstants.Name);
+                    items.Remove(item);
+                    var output = GetPropertyValueHandled(element, item);
+                    if (output != null)
+                    {
+                        details.Add(new DetailBO(item.Name, output?.ToString()));
+                    }
                 }
-            }
-            if (items.Any(x => x.Name == SHInspectConstants.ClassName))
-            {
-                var item = items.First(x => x.Name == SHInspectConstants.ClassName);
-                items.Remove(item);
-                var output = GetPropertyValueHandled(element, item);
-                if (output != null)
+                if (items.Any(x => x.Name == SHInspectConstants.ClassName))
                 {
-                    details.Add(new DetailBO(item.Name, output?.ToString()));
+                    var item = items.First(x => x.Name == SHInspectConstants.ClassName);
+                    items.Remove(item);
+                    var output = GetPropertyValueHandled(element, item);
+                    if (output != null)
+                    {
+                        details.Add(new DetailBO(item.Name, output?.ToString()));
+                    }
                 }
-            }
-            if (items.Any(x => x.Name == SHInspectConstants.ControlType))
-            {
-                var item = items.First(x => x.Name == SHInspectConstants.ControlType);
-                var output = GetPropertyValueHandled(element, item);
-                if (output != null)
+                if (items.Any(x => x.Name == SHInspectConstants.ControlType))
                 {
-                    details.Add(new DetailBO(item.Name, output?.ToString()));
+                    var item = items.First(x => x.Name == SHInspectConstants.ControlType);
+                    var output = GetPropertyValueHandled(element, item);
+                    if (output != null)
+                    {
+                        details.Add(new DetailBO(item.Name, output?.ToString()));
+                    }
+                    items.Remove(item);
                 }
-                items.Remove(item);
-            }
-            if (items.Any(x => x.Name == SHInspectConstants.HelpText))
-            {
-                var item = items.First(x => x.Name == SHInspectConstants.HelpText);
-                items.Remove(item);
-                var output = GetPropertyValueHandled(element, item);
-                if (output != null)
+                if (items.Any(x => x.Name == SHInspectConstants.HelpText))
                 {
-                    details.Add(new DetailBO(item.Name, output?.ToString()));
+                    var item = items.First(x => x.Name == SHInspectConstants.HelpText);
+                    items.Remove(item);
+                    var output = GetPropertyValueHandled(element, item);
+                    if (output != null)
+                    {
+                        details.Add(new DetailBO(item.Name, output?.ToString()));
+                    }
                 }
-            }
-            if (items.Any(x => x.Name == SHInspectConstants.IsOffscreen))
-            {
-                var item = items.First(x => x.Name == SHInspectConstants.IsOffscreen);
-                items.Remove(item);
-                var output = GetPropertyValueHandled(element, item);
-                if (output != null && output is bool)
+                if (items.Any(x => x.Name == SHInspectConstants.IsOffscreen))
                 {
-                    var outputBool = output as bool?;
-                    details.Add(new DetailBO(SHInspectConstants.IsOnscreen, (!outputBool.Value).ToString()));
+                    var item = items.First(x => x.Name == SHInspectConstants.IsOffscreen);
+                    items.Remove(item);
+                    var output = GetPropertyValueHandled(element, item);
+                    if (output != null && output is bool)
+                    {
+                        var outputBool = output as bool?;
+                        details.Add(new DetailBO(SHInspectConstants.IsOnscreen, (!outputBool.Value).ToString()));
+                    }
                 }
-            }
-            if (items.Any(x => x.Name == SHInspectConstants.IsEnabled))
-            {
-                var item = items.First(x => x.Name == SHInspectConstants.IsEnabled);
-                items.Remove(item);
-                var output = GetPropertyValueHandled(element, item);
-                if (output != null)
+                if (items.Any(x => x.Name == SHInspectConstants.IsEnabled))
                 {
-                    details.Add(new DetailBO(item.Name, output?.ToString()));
+                    var item = items.First(x => x.Name == SHInspectConstants.IsEnabled);
+                    items.Remove(item);
+                    var output = GetPropertyValueHandled(element, item);
+                    if (output != null)
+                    {
+                        details.Add(new DetailBO(item.Name, output?.ToString()));
+                    }
                 }
-            }
-            if (items.Any(x => x.Name == SHInspectConstants.BoundingRectangle))
-            {
-                var item = items.First(x => x.Name == SHInspectConstants.BoundingRectangle);
-                items.Remove(item);
-                var output = GetPropertyValueHandled(element, item);
-                if (output != null)
+                if (items.Any(x => x.Name == SHInspectConstants.BoundingRectangle))
                 {
-                    details.Add(new DetailBO(item.Name, output?.ToString()));
-                }
+                    var item = items.First(x => x.Name == SHInspectConstants.BoundingRectangle);
+                    items.Remove(item);
+                    var output = GetPropertyValueHandled(element, item);
+                    if (output != null)
+                    {
+                        details.Add(new DetailBO(item.Name, output?.ToString()));
+                    }
 
-                if (element.SupportsBoundingRectangle && !element.BoundingRectangle.IsEmpty)
+                    if (element.SupportsBoundingRectangle && !element.BoundingRectangle.IsEmpty)
+                    {
+                        using var capture = Capture.Element(element as SHAutomationElement);
+                        var bitmapSource = CreateBitmapSourceFromGdiBitmap(capture.Bitmap);
+                        image = bitmapSource;
+                    }
+                }
+                if (items.Any(x => x.Name == SHInspectConstants.RuntimeId))
                 {
-                    using var capture = Capture.Element(element as SHAutomationElement);
-                    var bitmapSource = CreateBitmapSourceFromGdiBitmap(capture.Bitmap);
-                    image = bitmapSource;
+                    var item = items.First(x => x.Name == SHInspectConstants.RuntimeId);
+                    items.Remove(item);
+                    var output = GetPropertyValueHandled(element, item);
+                    if (output != null && output is int[])
+                    {
+                        var arr = output as int[];
+                        string result = string.Join(",", arr);
+                        details.Add(new DetailBO(item.Name, result));
+                    }
+                }
+                if (items.Any(x => x.Name == SHInspectConstants.ProviderDescription))
+                {
+                    var item = items.First(x => x.Name == SHInspectConstants.ProviderDescription);
+                    items.Remove(item);
+                }
+                foreach (var item in items)
+                {
+                    var output = GetPropertyValueHandled(element, item);
+                    if (output != null)
+                    {
+                        details.Add(new DetailBO(item.Name, output.ToString()));
+                    }
                 }
             }
-            if (items.Any(x => x.Name == SHInspectConstants.RuntimeId))
+            catch (Exception ex) when (ex is OverflowException || ex is InvalidOperationException || ex is ArgumentException || ex is UnauthorizedAccessException)
             {
-                var item = items.First(x => x.Name == SHInspectConstants.RuntimeId);
-                items.Remove(item);
-                var output = GetPropertyValueHandled(element, item);
-                if (output != null && output is int[])
-                {
-                    var arr = output as int[];
-                    string result = string.Join(",", arr);
-                    details.Add(new DetailBO(item.Name, result));
-                }
-            }
-            if (items.Any(x => x.Name == SHInspectConstants.ProviderDescription))
-            {
-                var item = items.First(x => x.Name == SHInspectConstants.ProviderDescription);
-                items.Remove(item);
-            }
-            foreach (var item in items)
-            {
-                var output = GetPropertyValueHandled(element, item);
-                if (output != null)
-                {
-                    details.Add(new DetailBO(item.Name, output.ToString()));
-                }
+                return null;
             }
             return details;
         }

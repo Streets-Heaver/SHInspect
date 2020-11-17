@@ -25,11 +25,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.82" />
-    <PackageReference Include="FontAwesome.Sharp" Version="5.12.1" />
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.94" />
+    <PackageReference Include="FontAwesome.Sharp" Version="5.15.3" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
-    <PackageReference Include="Prism.Core" Version="7.2.0.1422" />
-    <PackageReference Include="SHAutomation" Version="1.0.8" />
+    <PackageReference Include="Prism.Core" Version="8.0.0.1909" />
+    <PackageReference Include="SHAutomation" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
