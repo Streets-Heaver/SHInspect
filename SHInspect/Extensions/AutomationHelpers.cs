@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -28,9 +29,11 @@ namespace SHInspect.Extensions
         {
             image = null;
             List<DetailBO> details = new List<DetailBO>();
+
             try
             {
                 var items = element.GetSupportedPropertiesDirect().Where(x => x.Id != 0 && !x.Name.Contains("Available")).ToList();
+
 
                 if (items.Any(x => x.Name == SHInspectConstants.AutomationId))
                 {
@@ -146,10 +149,12 @@ namespace SHInspect.Extensions
                     }
                 }
             }
+
             catch (Exception ex) when (ex is OverflowException || ex is InvalidOperationException || ex is ArgumentException || ex is UnauthorizedAccessException)
             {
                 return null;
             }
+
             return details;
         }
         private static object GetPropertyValueHandled(ISHAutomationElement automationElement, PropertyId propertyId)

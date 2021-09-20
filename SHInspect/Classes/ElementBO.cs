@@ -117,7 +117,8 @@ namespace SHInspect.Classes
             {
                 var childrenViewModels = new List<ElementBO>();
 
-                foreach (var child in AutomationElement.FindAll(TreeScope.Children, new BoolCondition(true), timeout: TimeSpan.Zero))
+
+                foreach (var child in AutomationElement.FindAll(TreeScope.Children, new BoolCondition(true), TimeSpan.Zero))
                 {
                     var childViewModel = new ElementBO((SHAutomationElement)child,IsTemporary,RootElement);
                     childrenViewModels.Add(childViewModel);
