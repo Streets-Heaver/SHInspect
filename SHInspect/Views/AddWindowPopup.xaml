@@ -16,13 +16,14 @@
             <RowDefinition  Height="Auto" />
             <RowDefinition  Height="Auto" />
             <RowDefinition  Height="Auto" />
+            <RowDefinition  Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Height="20" Background="LightGray" Text=" Automation Id" />
         <TextBlock Grid.Row="0" Grid.Column="1" Height="20" Background="LightGray" Text=" Name" />
         <TextBox Grid.Row="1" Margin="0,0,0,10" Grid.Column="0" Height="20" IsReadOnly="True" Text="{Binding SelectedWindow.AutomationId}" />
         <TextBox Grid.Row="1" Margin="0,0,0,10" Grid.Column="1" Height="20" IsReadOnly="True" Text="{Binding SelectedWindow.Name, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBox Grid.Column="0" Width="300" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" x:Name="WindowIdentifierBox" Padding="0" Text="{Binding SelectedWindow.Identifier}" />
-        <TextBlock Grid.Column="0" Width="300" Grid.ColumnSpan="2" Grid.Row="2"  IsHitTestVisible="False"  Text="Window Identifier"  Padding="5,0,0,0"  VerticalAlignment="Center" HorizontalAlignment="Stretch"  Foreground="DarkGray">
+        <TextBox Grid.Column="0" Width="180" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="WindowIdentifierBox" Padding="0" Text="{Binding SelectedWindow.Identifier}" Margin="5,0,0,0" />
+        <TextBlock Grid.Column="0" Width="180" Grid.ColumnSpan="2" Grid.Row="2"  IsHitTestVisible="False"  Text="Window Identifier"  Padding="5,0,0,0"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0"  Foreground="DarkGray">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -34,7 +35,9 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <Button Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5,2,0" HorizontalAlignment="Center" Width="200" Grid.Row="3" Command="{Binding AddWindowCommand}" CommandParameter="{Binding ElementName=PopupWindow}" Content="Add">
-        </Button>
+        <CheckBox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Row="2" IsChecked="{Binding SelectedWindow.IsTemporary}" Content="Is Temporary" ToolTip="Window displayed until next application close"/>
+        <Button Grid.Column="0" Grid.ColumnSpan="2" Margin="0,5,2,0" HorizontalAlignment="Center" Width="200" Grid.Row="4" Command="{Binding AddWindowCommand}" CommandParameter="{Binding ElementName=PopupWindow}" Content="Add"/>
+
+
     </Grid>
 </Window>

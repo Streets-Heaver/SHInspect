@@ -29,11 +29,11 @@ namespace SHInspect.Extensions
         {
             image = null;
             List<DetailBO> details = new List<DetailBO>();
-            List<PropertyId> items = new List<PropertyId>();
 
             try
             {
-                items = element.GetSupportedPropertiesDirect().Where(x => x.Id != 0 && !x.Name.Contains("Available")).ToList();
+                var items = element.GetSupportedPropertiesDirect().Where(x => x.Id != 0 && !x.Name.Contains("Available")).ToList();
+
 
                 if (items.Any(x => x.Name == SHInspectConstants.AutomationId))
                 {
@@ -149,7 +149,11 @@ namespace SHInspect.Extensions
                     }
                 }
             }
-            catch (COMException) { }
+
+            catch (Exception ex) when (ex is OverflowException || ex is InvalidOperationException || ex is ArgumentException || ex is UnauthorizedAccessException)
+            {
+                return null;
+            }
 
             return details;
         }
