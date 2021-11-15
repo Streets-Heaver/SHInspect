@@ -19,5 +19,6 @@ namespace SHInspect.Constants
         public static string RuntimeId = "RuntimeId";
         public static string ProviderDescription = "ProviderDescription";
         public static string IsOnscreen = "IsOnscreen";
+        public static string IsKeyboardFocusable = "IsKeyboardFocusable";
     }
 }
