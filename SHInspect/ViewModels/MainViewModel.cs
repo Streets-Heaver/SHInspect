@@ -46,6 +46,7 @@ namespace SHInspect.ViewModels
         public DelegateCommand MakeTemporaryCommand { get; private set; }
         public DelegateCommand RemoveWindowCommand { get; private set; }
         public DelegateCommand<string> CopyValueCommand { get; private set; }
+        public DelegateCommand FocusCommand { get; private set; }
 
         public MainViewModel()
         {
@@ -61,6 +62,7 @@ namespace SHInspect.ViewModels
             NextResultCommand = new DelegateCommand(() => ChangeResult(true), CanChangeResult);
             PreviousResultCommand = new DelegateCommand(() => ChangeResult(false), CanChangeResult);
             CopyXPathCommand = new DelegateCommand(CopyXPath, () => SelectedItemInTree != null);
+            FocusCommand = new DelegateCommand(FocusElement, () => SelectedItemInTree != null && SelectedItemInTree.AutomationElement.IsPropertySupportedDirect(new SHAutomation.Core.Identifiers.PropertyId(30009, SHInspectConstants.IsKeyboardFocusable)));
             GoToParentCommand = new DelegateCommand(GoToParent, CanGoToParent);
             GoToRootCommand = new DelegateCommand(GoToRoot, CanGoToRoot);
             RemoveWindowCommand = new DelegateCommand(RemoveWindow, CanRemoveWindow);
@@ -487,6 +489,10 @@ namespace SHInspect.ViewModels
             var segments = xpath.Split('/').ToList();
             segments.RemoveRange(0, 2);
             Clipboard.SetText(string.Join('/', segments));
+        }
+        public void FocusElement()
+        {
+            SelectedItemInTree?.AutomationElement?.TryFocus();
         }
         public void GoToParent()
         {
