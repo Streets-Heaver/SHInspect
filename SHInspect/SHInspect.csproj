@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -9,6 +9,7 @@
     <Authors>Tom Poucher</Authors>
     <Company>Streets Heaver</Company>
     <Description>Inspector for UI elements.</Description>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,11 +25,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.82" />
-    <PackageReference Include="FontAwesome.Sharp" Version="5.12.1" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
-    <PackageReference Include="Prism.Core" Version="7.2.0.1422" />
-    <PackageReference Include="SHAutomation" Version="1.0.8" />
+
+    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.97" />
+    <PackageReference Include="FontAwesome.Sharp" Version="5.15.3" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
+    <PackageReference Include="SHAutomation" Version="3.0.5" />
+
   </ItemGroup>
 
   <ItemGroup>

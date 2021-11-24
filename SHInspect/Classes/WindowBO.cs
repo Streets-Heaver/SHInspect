@@ -18,7 +18,16 @@ namespace SHInspect.Classes
         public string Identifier { get; set; }
         public ISHAutomationElement AutomationElement { get; set; }
         public bool IsCurrent { get; set; }
+        private bool isTemporary;
 
+        public bool IsTemporary
+        {
+            get { return isTemporary; }
+            set {
+                isTemporary = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public WindowBO(ISHAutomationElement automationElement, bool isCurrent)
         {

@@ -65,12 +65,17 @@ namespace SHInspect.ViewModels
                         });
                         var screenPos = Mouse.Position;
                         var hov = Automation.FromPoint(screenPos);
-                        ElementBO hoveredElement = hov != null ? new ElementBO(hov) : null;
-                        var win = hoveredElement != null ?  GetRootFromElement(hoveredElement) : null;
-                        if(win == null)
+                        ElementBO hoveredElement = hov != null ? new ElementBO(hov, false,null) : null;
+                        var win = hoveredElement != null ? GetRootFromElement(hoveredElement) : null;
+                   
+                        if (win == null)
                         {
                             Inspecting = false;
                             return;
+                        }
+                        else
+                        {
+                            hoveredElement.RootElement = win as SHAutomationElement;
                         }
                         if (SavedSettingsWindows.Any(x => x.Identifier == win.AutomationId || x.Identifier == win.Name))
                         {
@@ -135,10 +140,12 @@ namespace SHInspect.ViewModels
         {
             if (System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Shift) && System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Control) && System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Alt))
             {
+                _previousRefresh = DateTime.Now;
                 await Inspect(true);
             }
             else if (System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Control) && System.Windows.Input.Keyboard.Modifiers.HasFlag(System.Windows.Input.ModifierKeys.Alt))
             {
+                _previousRefresh = DateTime.Now;
                 await Inspect(false);
             }
             else
