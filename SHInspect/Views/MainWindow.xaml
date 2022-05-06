@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SHInspect"
         xmlns:views="clr-namespace:SHInspect.Views"
         xmlns:controls="clr-namespace:SHInspect.Controls"
+        xmlns:converters="clr-namespace:SHInspect.Converters"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
         Height="750" Width="900">
@@ -13,6 +14,9 @@
         <KeyBinding Command="{Binding PreviousResultCommand}" Modifiers="Shift" Key="Tab"/>
         <KeyBinding Command="{Binding NextResultCommand}" Key="Tab"/>
     </Window.InputBindings>
+    <Window.Resources>
+        <converters:PatternTypeConverter x:Key="PatternTypeConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="100"></ColumnDefinition>
@@ -205,6 +209,7 @@
                                                 <fa:IconBlock.Style>
                                                     <Style TargetType="fa:IconBlock">
                                                         <Setter Property="Foreground" Value="Gray"></Setter>
+
                                                         <Style.Triggers>
                                                             <Trigger Property="IsEnabled" Value="False">
                                                                 <Setter Property="Foreground" Value="LightGray"/>
@@ -213,6 +218,40 @@
                                                     </Style>
                                                 </fa:IconBlock.Style>
                                             </fa:IconBlock>
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding PatternType, Converter={StaticResource PatternTypeConverter}}" Value="Field">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                        <Button Grid.Column="1" Background="Transparent" BorderThickness="0,1,0,1" Command="{Binding DataContext.InvokeMethodCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding Path=Method}" ToolTip="Invoke">
+                                            <fa:IconBlock Icon="Play" FontSize="18">
+                                                <fa:IconBlock.Style>
+                                                    <Style TargetType="fa:IconBlock">
+                                                        <Setter Property="Foreground" Value="Green"></Setter>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                <Setter Property="Foreground" Value="LightGray"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </fa:IconBlock.Style>
+                                            </fa:IconBlock>
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding PatternType, Converter={StaticResource PatternTypeConverter}}" Value="Method">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
                                         </Button>
                                         <TextBox Text="{Binding Path=Key}" BorderThickness="1" FontWeight="Bold" Padding="5,5,0,0" Grid.Column="0" IsReadOnly="True" HorizontalAlignment="Stretch"  Focusable="False" ToolTip="{Binding Path=Key}">
                                             <TextBox.Style>
@@ -223,7 +262,7 @@
                                                         <MultiDataTrigger>
                                                             <MultiDataTrigger.Conditions>
                                                                 <Condition Binding="{Binding IsSupported}" Value="True"></Condition>
-                                                                <Condition Binding="{Binding IsHeader}" Value="True"></Condition>
+                                                                <Condition Binding="{Binding PatternType}" Value="Header"></Condition>
                                                             </MultiDataTrigger.Conditions>
                                                             <MultiDataTrigger.Setters>
                                                                 <Setter Property="Foreground" Value="Green"/>
@@ -235,7 +274,7 @@
                                                         <MultiDataTrigger>
                                                             <MultiDataTrigger.Conditions>
                                                                 <Condition Binding="{Binding IsSupported}" Value="False"></Condition>
-                                                                <Condition Binding="{Binding IsHeader}" Value="True"></Condition>
+                                                                <Condition Binding="{Binding PatternType}" Value="Header"></Condition>
                                                             </MultiDataTrigger.Conditions>
                                                             <MultiDataTrigger.Setters>
                                                                 <Setter Property="Foreground" Value="Red"/>

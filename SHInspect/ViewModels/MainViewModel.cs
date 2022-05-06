@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,6 +47,7 @@ namespace SHInspect.ViewModels
         public DelegateCommand MakeTemporaryCommand { get; private set; }
         public DelegateCommand RemoveWindowCommand { get; private set; }
         public DelegateCommand<string> CopyValueCommand { get; private set; }
+        public DelegateCommand <MethodDetails> InvokeMethodCommand { get; private set; }
         public DelegateCommand FocusCommand { get; private set; }
 
         public MainViewModel()
@@ -69,6 +71,7 @@ namespace SHInspect.ViewModels
             MakeTemporaryCommand = new DelegateCommand(MakeTemporary, CanRemoveWindow);
 
             CopyValueCommand = new DelegateCommand<string>(CopyValue, CanCopyValue);
+            InvokeMethodCommand = new DelegateCommand<MethodDetails>(InvokeMethod, CanInvokeMethod);
             SelectedSearchTerm = Settings.Default.SearchMode;
             Loaded();
         }
@@ -247,12 +250,24 @@ namespace SHInspect.ViewModels
         {
             return !string.IsNullOrEmpty(value);
         }
-
+        bool CanInvokeMethod(MethodDetails method)
+        {
+            return method != null;
+        }
         void CopyValue(string value)
         {
             Clipboard.SetText(value);
         }
-
+        void InvokeMethod(MethodDetails method)
+        {
+            try
+            {
+                method.Method.Invoke(method.TargetObject, null);
+            }
+            catch(Exception)
+            { 
+            }
+        }
         public void ChangeLiveState()
         {
             IsLive = !IsLive;
