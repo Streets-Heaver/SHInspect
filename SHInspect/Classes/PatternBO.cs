@@ -1,18 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Media;
+﻿using SHInspect.Enums;
 
 namespace SHInspect.Classes
 {
     public class PatternBO : BaseNotify
     {
-        public PatternBO(string key, string value,bool isSupported, bool isHeader)
+        public PatternBO(string key, string value,bool isSupported, PatternType patternType)
         {
             Key = key;
             Value = value;
             IsSupported = isSupported;
-            IsHeader = isHeader;
+            PatternType = patternType;
+        }
+        public PatternBO(string key, MethodDetails method, bool isSupported, PatternType patternType)
+        {
+            Key = key;
+            Method = method;
+            IsSupported = isSupported;
+            PatternType = patternType;
+        }
+        private MethodDetails _method;
+
+        public MethodDetails Method
+        {
+            get { return _method; }
+            set { _method = value; }
         }
 
         private string _key;
@@ -48,22 +59,21 @@ namespace SHInspect.Classes
                 RaisePropertyChanged();
             }
         }
-        private bool _isHeader;
+        private PatternType _patternType;
 
-        public bool IsHeader
+        public PatternType PatternType
         {
-            get { return _isHeader; }
+            get { return _patternType; }
             set
             {
-                _isHeader = value;
+                _patternType = value;
                 RaisePropertyChanged();
             }
         }
 
-        
         public bool Equals(PatternBO other)
         {
-            return other != null && Key == other.Key && Value == other.Value && IsHeader == other.IsHeader && IsSupported == other.IsSupported;
+            return other != null && Key == other.Key && Value == other.Value && PatternType == other.PatternType && IsSupported == other.IsSupported;
         }
 
         public override int GetHashCode()

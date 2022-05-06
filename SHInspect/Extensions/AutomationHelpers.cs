@@ -1,21 +1,15 @@
-﻿using SHAutomation.Core;
-using SHAutomation.Core.AutomationElements;
+﻿using SHAutomation.Core.AutomationElements;
 using SHAutomation.Core.Capturing;
 using SHAutomation.Core.Identifiers;
-using SHAutomation.Core.Patterns;
-using SHAutomation.Core.Patterns.Infrastructure;
-using SHAutomation.UIA3;
 using SHInspect.Classes;
 using SHInspect.Constants;
+using SHInspect.Enums;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using static SHAutomation.Core.FrameworkAutomationElementBase;
@@ -205,7 +199,13 @@ namespace SHInspect.Extensions
             return type.GetProperties(BindingFlags.FlattenHierarchy
                 | BindingFlags.Public | BindingFlags.Instance);
         }
-
+        public static List<MethodDetails> GetPublicMethods(this object ob)
+        {
+            var type = ob.GetType();
+            var propertyInfos = new List<MethodInfo>();
+            var methods = type.GetMethods().Where(x => x.ReturnType == typeof(void) && !x.GetParameters().Any()).Select(x => new MethodDetails(x,ob)).ToList();
+            return methods;
+        }
         public static List<PatternBO> GetElementDetailViewModelPatterns(ISHAutomationElement element)
         {
             try
@@ -214,41 +214,41 @@ namespace SHInspect.Extensions
                 var library = element.Automation.PatternLibrary;
                 PropertyInfo[] allPatterns = GetPublicProperties(library.GetType());
                 List<string> patternNames = allPatterns.Select(x => x.Name.Split("Pattern")[0]).ToList();
-                var supportedPatterns = element.GetSupportedPatterns().Where(x => x.Id != 0);
+                var supportedPatterns = element.GetSupportedPatterns().Where(x => x.Id != 0).ToList();
                 var automationPatterns = element.Patterns;
                 var automationPatternsProperties = GetPublicProperties(typeof(IFrameworkPatterns));
 
-
-                foreach (var item in patternNames)
+                var unSupportedPatterns = patternNames.Where(x => !supportedPatterns.Select(x => x.Name).Contains(x));
+                foreach (var pattern in supportedPatterns)
                 {
-                    if (supportedPatterns.Any(x => x.Name == item))
-                    {
-                        var pattern = supportedPatterns.First(x => x.Name == item);
-                        object output;
-                        element.FrameworkAutomationElement.TryGetNativePattern(pattern, out output);
+                    object output;
+                    element.FrameworkAutomationElement.TryGetNativePattern(pattern, out output);
 
-                        if (output != null)
+                    if (output != null)
+                    {
+                        details.Add(new PatternBO(pattern.Name, string.Empty, true, PatternType.Header));
+                        var patternObject = automationPatternsProperties.First(x => x.Name.Split("Pattern")[0] == pattern.Name);
+                        var patternType = patternObject.GetMethod.Invoke(automationPatterns, null);
+                        var patternGet = patternType.GetType().GetMethods().First(x => x.Name == "get_Pattern").Invoke(patternType, null);
+                        var patternProperties = GetPublicProperties(patternGet.GetType());
+                        var methodInfos = GetPublicMethods(patternGet);
+                        foreach (var prop in patternProperties)
                         {
-                            details.Add(new PatternBO(item, string.Empty, true, true));
-                            var patternObject = automationPatternsProperties.First(x => x.Name.Split("Pattern")[0] == pattern.Name);
-                            var patternType = patternObject.GetMethod.Invoke(automationPatterns, null);
-                            var patternGet = patternType.GetType().GetMethods().First(x => x.Name == "get_Pattern").Invoke(patternType, null);
-                            var patternProperties = GetPublicProperties(patternGet.GetType());
-                            foreach (var prop in patternProperties)
+                            var returntype = prop.GetMethod.ReturnType;
+                            if (returntype.Name.Contains("AutomationProperty"))
                             {
-                                var returntype = prop.GetMethod.ReturnType;
-                                if (returntype.Name.Contains("AutomationProperty"))
-                                {
-                                    details.Add(new PatternBO(prop.Name, prop.GetMethod.Invoke(patternGet, null).ToString(), true, false));
-                                }
+                                details.Add(new PatternBO(prop.Name, prop.GetMethod.Invoke(patternGet, null).ToString(), true, PatternType.Field));
                             }
                         }
+                        foreach (var method in methodInfos)
+                        {
+                            details.Add(new PatternBO(method.Method.Name, method, true, PatternType.Method));
+                        }
                     }
-                    else
-                    {
-                        details.Add(new PatternBO(item, string.Empty, false, true));
-                    }
-
+                }
+                foreach (var item in unSupportedPatterns)
+                {
+                    details.Add(new PatternBO(item, string.Empty, false, PatternType.Header));
                 }
                 return details.OrderByDescending(x => x.IsSupported).ToList();
             }
