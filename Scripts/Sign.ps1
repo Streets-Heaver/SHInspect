@@ -2,7 +2,8 @@ Param(
     [string]$kvu,
     [string]$kvi,
     [string]$kvs,
-    [string]$kvc
+    [string]$kvc,
+    [string]$tenant
 )
 
 dotnet tool update --global AzureSignTool
@@ -17,4 +18,4 @@ foreach ($t in $files) {
 
 Write-Host "Starting Sign"
 
-AzureSignTool sign -kvu $kvu -kvi $kvi -kvs $kvs -kvc $kvc -v -ifl "$Env:Build_ArtifactStagingDirectory\sign.txt"
+AzureSignTool sign -kvu $kvu -kvi $kvi -kvs $kvs -kvc $kvc -v -ifl "$Env:Build_ArtifactStagingDirectory\sign.txt" --azure-key-vault-tenant-id $tenant
