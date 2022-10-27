@@ -86,7 +86,5 @@ namespace SHInspect.Controls
         public static readonly DependencyProperty SearchCommandProperty =
             DependencyProperty.Register(nameof(SearchCommand), typeof(DelegateCommand), typeof(SearchBox), new PropertyMetadata(null));
 
-
-
     }
 }

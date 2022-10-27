@@ -21,5 +21,6 @@ namespace SHInspect.Views
         {
             InitializeComponent();
         }
+
     }
 }

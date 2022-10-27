@@ -5,61 +5,81 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              mc:Ignorable="d" x:Name="searchBox"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignWidth="800"
+             xmlns:ui="http://schemas.modernwpf.com/2019">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <ToggleButton Grid.Column="0" VerticalAlignment="Stretch" IsTabStop="False"  IsChecked="{Binding IsSettings}"  Padding="0"  BorderThickness="0" >
+        <ToggleButton Grid.Column="0" VerticalAlignment="Stretch" IsTabStop="False"  IsChecked="{Binding IsSettings}"  Padding="5" BorderThickness="0" >
             <ToggleButton.Template>
-                <ControlTemplate TargetType="{x:Type ToggleButton}"  >
-                    <ContentControl Margin="4,0,4,0" IsTabStop="False" >
+                <ControlTemplate TargetType="{x:Type ToggleButton}" >
+                    <ContentControl Margin="10,0,4,0" IsTabStop="False" >
                         <Grid>
-                            <Grid.Style>
-                                <Style TargetType="Grid">
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="LightSkyBlue"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Grid.Style>
-                            <fa:IconBlock Icon="Cog" FontSize="20"/>
+                            <fa:IconBlock FontSize="20">
+                                <fa:IconBlock.Style>
+                                    <Style TargetType="{x:Type fa:IconBlock}">
+                                        <Setter Property="Icon" Value="Cog"></Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSettings}" Value="True">
+                                                <Setter Property="Icon" Value="ArrowLeft"></Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </fa:IconBlock.Style>
+                            </fa:IconBlock>
                         </Grid>
                     </ContentControl>
                 </ControlTemplate>
             </ToggleButton.Template>
         </ToggleButton>
-        <TextBox Grid.Column="1" VerticalAlignment="Center" Focusable="True" IsTabStop="False" HorizontalAlignment="Stretch" x:Name="SearchTermTextBox" ToolTip="CTRL + F" Padding="0" Text="{Binding SearchText, ElementName=searchBox, UpdateSourceTrigger=PropertyChanged}" FontSize="{Binding FontSize, ElementName=searchBox}">
+
+        <TextBox Grid.Column="1" Focusable="True" IsTabStop="False" VerticalAlignment="Center" x:Name="SearchTermTextBox" ToolTip="CTRL + F" Padding="5,0,0,0" Text="{Binding SearchText, ElementName=searchBox, UpdateSourceTrigger=PropertyChanged}" FontSize="{Binding FontSize, ElementName=searchBox}" TextAlignment="Left" VerticalContentAlignment="Center">
             <TextBox.InputBindings>
                 <KeyBinding Key="Enter"  Command="{Binding SearchCommand, ElementName=searchBox}" />
             </TextBox.InputBindings>
             <TextBox.Style>
-                <Style TargetType="{x:Type TextBox}">
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                     <Setter Property="IsEnabled" Value="True"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding SelectedItemInTree}" Value="{x:Null}">
                             <Setter Property="IsEnabled" Value="False"></Setter>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding IsSettings}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <TextBlock Grid.Column="1" IsHitTestVisible="False"  Text="{Binding PlaceHolderText, ElementName=searchBox}" FontSize="{Binding FontSize, ElementName=searchBox}" Padding="5,0,0,0"  VerticalAlignment="Center" HorizontalAlignment="Stretch"  Foreground="DarkGray">
+        <TextBlock Grid.Column="1" IsHitTestVisible="False"  Text="{Binding PlaceHolderText, ElementName=searchBox}" FontSize="{Binding FontSize, ElementName=searchBox}" Padding="5,0,0,0"  VerticalAlignment="Center" HorizontalAlignment="Stretch" >
             <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Text, ElementName=SearchTermTextBox}" Value="">
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding IsSettings}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <ComboBox Grid.Column="2" Width="150" Height="21" IsTabStop="False" HorizontalContentAlignment="Stretch" FontSize="12" VerticalContentAlignment="Center" ItemsSource="{Binding SearchTerms, ElementName=searchBox}" SelectedItem="{Binding SelectedSearchTerm, ElementName=searchBox, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <ComboBox Grid.Column="2" Width="150" IsTabStop="False" HorizontalContentAlignment="Stretch" FontSize="12" VerticalContentAlignment="Center" ItemsSource="{Binding SearchTerms, ElementName=searchBox}" SelectedItem="{Binding SelectedSearchTerm, ElementName=searchBox, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+            <ComboBox.Style>
+                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSettings}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ComboBox.Style>
+        </ComboBox>
     </Grid>
 </UserControl>

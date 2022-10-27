@@ -10,8 +10,8 @@
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
              xmlns:behaviours="clr-namespace:SHInspect.Classes"
              xmlns:controls="clr-namespace:SHInspect.Controls" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             d:DesignHeight="450" d:DesignWidth="800">
-
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:ui="http://schemas.modernwpf.com/2019">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -22,7 +22,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
-        <GroupBox Header="Visual Tree" Grid.Row="1" Grid.ColumnSpan="2">
+        <GroupBox Header="Visual Tree" Grid.Row="1" Grid.ColumnSpan="2" Margin="10">
             <Grid>
                 <fa:IconImage  Icon="Spinner" fa:Awesome.Spin="True" Foreground="Gray"  Height="30" Width="30" Panel.ZIndex="1">
                     <fa:IconImage.Style>
@@ -46,7 +46,7 @@
                     </i:Interaction.Behaviors>
                     <TreeView.ItemContainerStyle>
 
-                        <Style TargetType="{x:Type TreeViewItem}">
+                        <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                             <Setter Property="ItemsPanel">
                                 <Setter.Value>
                                     <ItemsPanelTemplate>
@@ -57,22 +57,16 @@
                             <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                             <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                             <Setter Property="FontWeight" Value="Normal" />
-                            <Setter Property="Foreground" Value="Black" />
-                            <!--<Setter Property="Background" Value="Transparent" />-->
                             <EventSetter Event="Selected" Handler="TreeViewSelectedHandler" />
                             <EventSetter Event="MouseDown" Handler="TreeViewSelectedHandler" />
                             <EventSetter Event="MouseEnter" Handler="TreeViewMouseEnterSelectedHandler" />
                             <Style.Triggers>
-                     
+
                                 <DataTrigger Binding="{Binding IsTemporary}" Value="True">
                                     <Setter Property="Foreground" Value="Red" />
                                 </DataTrigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#efefef"/>
-                                </Trigger>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="FontWeight" Value="Bold" />
-                                    <Setter Property="Foreground" Value="White" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -89,7 +83,7 @@
                                         <MenuItem Header="Remove Window" Command="{Binding RemoveWindowCommand}"/>
                                         <MenuItem Command="{Binding MakeTemporaryCommand}">
                                             <MenuItem.Style>
-                                                <Style TargetType="MenuItem">
+                                                <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
                                                     <Setter Property="Header" Value="Make Temporary"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding SelectedItemInTree.IsTemporary, Mode=TwoWay}" Value="True">
@@ -116,8 +110,8 @@
                 </TreeView>
             </Grid>
         </GroupBox>
-        <Button HorizontalAlignment="Right" Height="30" Width="30" IsTabStop="False" Focusable="False" Background="Transparent" Padding="5" BorderThickness="0" Grid.Row="0" Grid.Column="1"  Command="{Binding RefreshGridCommand}" ToolTip="Refresh Grid">
-            <fa:IconImage Icon="SyncAlt" Focusable="False"/>
+        <Button HorizontalAlignment="Right" Height="40" IsTabStop="False" Focusable="False"  Padding="5" BorderThickness="0" Grid.Row="0" Grid.Column="1" Background="Transparent" Command="{Binding RefreshGridCommand}" ToolTip="Refresh Grid">
+            <fa:IconBlock Icon="SyncAlt" Focusable="False"/>
         </Button>
         <Grid HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Height="20" >
             <Grid.ColumnDefinitions>
@@ -125,18 +119,18 @@
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
-            <TextBlock  Text="{Binding SearchResultText}"  FontStyle="Italic" Grid.Column="0" Padding="5,0,5,0" Focusable="False"/>
+            <TextBlock  Text="{Binding SearchResultText}"  FontStyle="Italic" Grid.Column="0" Padding="10,0,5,0" Focusable="False"/>
             <Button Background="Transparent"  IsTabStop="False" BorderThickness="0" Padding="5,0,5,0" HorizontalAlignment="Right" Grid.Column="1" Command="{Binding PreviousResultCommand}">
-                <fa:IconImage Icon="ChevronLeft" />
+                <fa:IconBlock Icon="ChevronLeft" />
             </Button>
             <Button Background="Transparent" IsTabStop="False" BorderThickness="0" Padding="5,0,5,0" HorizontalAlignment="Right" Grid.Column="2" Command="{Binding NextResultCommand}">
-                <fa:IconImage Icon="ChevronRight" />
+                <fa:IconBlock Icon="ChevronRight" />
             </Button>
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Setter Property="Visibility" Value="Visible"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding SearchResultText}" Value="{x:Null}">
+                        <DataTrigger Binding="{Binding SearchResultText}" Value="{x:Null}" >
                             <Setter Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
                     </Style.Triggers>

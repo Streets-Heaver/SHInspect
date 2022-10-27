@@ -6,7 +6,12 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:behaviours="clr-namespace:SHInspect.Classes"
-        mc:Ignorable="d">
+        mc:Ignorable="d"
+        xmlns:converters="clr-namespace:SHInspect.Converters"
+        xmlns:ui="http://schemas.modernwpf.com/2019">
+    <UserControl.Resources>
+        <converters:ThemeTypeConverter x:Key="ThemeTypeConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -22,7 +27,7 @@
         </Grid.RowDefinitions>
         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Settings" />
 
-        <GroupBox Header="Windows To Display">
+        <GroupBox Margin="10" Header="Windows To Display">
             <ListBox ItemsSource="{Binding SavedSettingsWindows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Margin="5" SelectedItem="{Binding SelectedExistingWindowItem, Mode=TwoWay}">
                 <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -33,10 +38,10 @@
                                     <ColumnDefinition></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                             </Grid>
-                            <TextBlock Grid.Column="0" Text="{Binding Path=Identifier}" Foreground="Black"/>
+                            <TextBlock Grid.Column="0" Text="{Binding Path=Identifier}"/>
                             <TextBlock Grid.Column="1" Text="(temporary)" FontStyle="Italic"  Foreground="Red" Padding="5,0,0,0">
                                 <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                         <Setter Property="Visibility" Value="Collapsed"></Setter>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Path=IsTemporary}" Value="True">
@@ -72,8 +77,8 @@
             </ListBox.ItemTemplate>
         </ListBox>
         </GroupBox>
-        <GroupBox  Grid.Row="1" Grid.ColumnSpan="3" Margin="10">
-        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+        <GroupBox  Grid.Row="2" Grid.ColumnSpan="3" Margin="10">
+        <Grid Grid.Row="2" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
@@ -85,15 +90,15 @@
                     <RowDefinition  Height="Auto" />
                     <RowDefinition  Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0" Height="20" Background="LightGray" Text="Automation Id"/>
-                <TextBlock Grid.Row="0" Grid.Column="1" Height="20" Background="LightGray" Text="Name" />
+                <TextBlock Grid.Row="0" Grid.Column="0" Height="20" Text="Automation Id"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Height="20" Text="Name" />
                 <TextBox Grid.Row="1" Margin="0,0,0,10" Grid.Column="0" Height="20" IsReadOnly="True" Text="{Binding SelectedWindowItem.AutomationId}"/>
                 <TextBox Grid.Row="1" Margin="0,0,0,10" Grid.Column="1" Height="20" IsReadOnly="True" Text="{Binding SelectedWindowItem.Name}" />
-                <TextBox Grid.Column="0" Width="300" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" x:Name="WindowIdentifierBox" Padding="0" Text="{Binding IdentifierToAdd, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+                <TextBox Grid.Column="0" Width="300" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" x:Name="WindowIdentifierBox" Padding="5,0,0,0" Text="{Binding IdentifierToAdd, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" VerticalContentAlignment="Center"/>
                
                 <TextBlock Grid.Column="0" Width="300" Grid.ColumnSpan="2" Grid.Row="2"  IsHitTestVisible="False"  Text="Window Identifier"  Padding="5,0,0,0"  VerticalAlignment="Center" HorizontalAlignment="Center"  Foreground="DarkGray">
                     <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
+                        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Text, ElementName=WindowIdentifierBox}" Value="">
@@ -106,7 +111,7 @@
                 <CheckBox Grid.Column="1" Grid.ColumnSpan="1"  HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="2" IsChecked="{Binding SelectedWindowItem.IsTemporary}" Content="Is Temporary" ToolTip="Window displayed until next application close"/>
                 <Button Grid.Column="0" Margin="0,5,2,0" HorizontalAlignment="Right" Width="200" Grid.Row="4" Command="{Binding AddWindowCommand}">
                     <Button.Style>
-                        <Style TargetType="{x:Type Button}">
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                             <Setter Property="Content" Value="Add"></Setter>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedWindowItem.IsCurrent}" Value="False">
@@ -121,7 +126,7 @@
                 </Button>
                 <Button Grid.Column="1" Margin="2,5,0,0" HorizontalAlignment="Left" Width="200" Grid.Row="4" Command="{Binding DeleteWindowCommand}">
                     <Button.Style>
-                        <Style TargetType="{x:Type Button}">
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                             <Setter Property="Content" Value="Delete" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedWindowItem.IsCurrent}" Value="True">
@@ -136,7 +141,7 @@
                 </Button>
             </Grid>
             <GroupBox.Style>
-                <Style TargetType="{x:Type GroupBox}">
+                <Style TargetType="{x:Type GroupBox}" BasedOn="{StaticResource {x:Type GroupBox}}">
                     <Setter Property="Header" Value="Add Window"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding SelectedWindowItem.IsCurrent}" Value="False">
@@ -146,17 +151,32 @@
                 </Style>
             </GroupBox.Style>
         </GroupBox>
-        <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2">
+        <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Margin="20">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition  Width="Auto"/>
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <CheckBox Content="Select Element With Mouse Hover" ToolTip="Use this mode to manually select elements when clicking closes the element ie popups" Grid.Column="1" IsChecked="{Binding HoverSelect,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="10,0,0,0"/>
-            <TextBlock Text="Inspection Colour:" HorizontalAlignment="Right" Padding="20,0,0,0" Grid.Column="2"/>
-            <xctk:ColorPicker Grid.Column="3" SelectedColor="{Binding SelectedColour,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" DisplayColorAndName="True" MinWidth="200"  Margin="10,0,0,0" HorizontalAlignment="Left" ShowStandardColors="False" ShowRecentColors="False"  ShowTabHeaders="False" />
-            
+
+            <CheckBox Content="Select Element With Mouse Hover" ToolTip="Use this mode to manually select elements when clicking closes the element ie popups" Grid.Column="0" IsChecked="{Binding HoverSelect,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="10,0,0,0"/>
+            <TextBlock Text="Inspection Colour:" HorizontalAlignment="Left"  Grid.Column="1" VerticalAlignment="Center" FontSize="15" Padding="0,0,5,0"/>
+            <xctk:ColorPicker Grid.Column="2" SelectedColor="{Binding SelectedColour,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" MinWidth="200"   HorizontalAlignment="Left" ShowStandardColors="False" ShowRecentColors="False" ShowTabHeaders="False"  Background="Transparent" AvailableColorsSortingMode="HueSaturationBrightness">
+                <xctk:ColorPicker.Style>
+                    <Style TargetType="{x:Type xctk:ColorPicker}" BasedOn="{StaticResource {x:Type xctk:ColorPicker}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedThemeType, Converter={StaticResource ThemeTypeConverter}}" Value="Dark">
+                                <Setter Property="HeaderForeground" Value="White"/>
+                                <Setter Property="HeaderBackground" Value="Black"/>
+                                <Setter Property="DropDownBackground" Value="Black"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </xctk:ColorPicker.Style>
+            </xctk:ColorPicker>
+            <TextBlock Text="Theme:" HorizontalAlignment="Left"  Grid.Column="3" VerticalAlignment="Center" FontSize="15" Padding="0,0,5,0"/>
+            <ComboBox Grid.Column="4" MinWidth="200"  ItemsSource="{Binding ThemeTypes}" SelectedItem="{Binding SelectedThemeType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         </Grid>
         <Button Content="Test Crash" Margin="5" Grid.ColumnSpan="3" HorizontalAlignment="Center" Width="200" Grid.Row="4" Command="{Binding CrashWindowCommand}"/>
     </Grid>

@@ -9,7 +9,9 @@
         xmlns:converters="clr-namespace:SHInspect.Converters"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-        Height="750" Width="900">
+        Height="750" Width="900"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        ui:WindowHelper.UseModernWindowStyle="True">
     <Window.InputBindings>
         <KeyBinding Command="{Binding PreviousResultCommand}" Modifiers="Shift" Key="Tab"/>
         <KeyBinding Command="{Binding NextResultCommand}" Key="Tab"/>
@@ -29,11 +31,12 @@
         </Grid.RowDefinitions>
         <controls:SearchBox SearchCommand="{Binding SearchCommand}" SearchText="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                             SearchTerms="{Binding SearchTerms}" SelectedSearchTerm="{Binding SelectedSearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            PlaceHolderText="Search for something..." Grid.Column="0" Grid.Row="0" FontSize="15"  HorizontalAlignment="Stretch"/>
-        <Button HorizontalAlignment="Right"  Height="30" Width="30" IsTabStop="False" Focusable="False" Background="Transparent" Margin="0,0,10,0"  BorderThickness="0" Grid.Row="0" Grid.Column="3"  Command="{Binding RefreshWindowsCommand}" ToolTip="Refresh Active Windows">
-            <fa:IconImage Icon="SyncAlt" Focusable="False"/>
+                            PlaceHolderText="Search for something..." Grid.Column="0" Grid.Row="0" FontSize="15"  HorizontalAlignment="Stretch">
+        </controls:SearchBox>
+        <Button HorizontalAlignment="Right"  Height="40" IsTabStop="False" Focusable="False" Margin="0,0,10,0" Background="Transparent" BorderThickness="0" Grid.Row="0" Grid.Column="3"  Command="{Binding RefreshWindowsCommand}" ToolTip="Refresh Active Windows">
+            <fa:IconBlock Icon="SyncAlt" Focusable="False"/>
             <Button.Style>
-                <Style TargetType="Button">
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsSettings}" Value="True">
@@ -41,7 +44,7 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-                
+
             </Button.Style>
         </Button>
         <views:SettingsView Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
@@ -71,7 +74,7 @@
         </views:AutomationTreeView>
         <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" IsTabStop="False"  HorizontalAlignment="Stretch">
             <GridSplitter.Style>
-                <Style TargetType="{x:Type GridSplitter}">
+                <Style TargetType="{x:Type GridSplitter}" BasedOn="{StaticResource {x:Type GridSplitter}}">
                     <Setter Property="Visibility" Value="Visible"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsSettings}" Value="True">
@@ -81,7 +84,7 @@
                 </Style>
             </GridSplitter.Style>
         </GridSplitter>
-        <Grid x:Name="PropertyGrid" Grid.Column="2" Grid.Row="0"  Grid.RowSpan="2" Background="LightGray" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid x:Name="PropertyGrid" Grid.Column="2" Grid.Row="0"  Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid Height="{Binding ActualHeight, ElementName=PropertyGrid}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -94,7 +97,7 @@
                         <Image Source="{Binding Path=Image}"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
                         <TextBlock Text="No Image" HorizontalAlignment="Center" VerticalAlignment="Center" Focusable="False">
                             <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
+                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Path=Image}" Value="{x:Null}">
@@ -106,18 +109,16 @@
                         </TextBlock>
                     </Grid>
                 </ContentControl>
-                <StackPanel Grid.RowSpan="2" Margin="0,0,10,0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <Button HorizontalAlignment="Right" IsTabStop="False" Height="40" Width="40" Background="Transparent"  BorderThickness="0" Grid.Row="0" Grid.Column="1"  Command="{Binding IsLiveCommand}">
-                        <fa:IconBlock  FontSize="30">
+                <ui:SimpleStackPanel Grid.RowSpan="2" Margin="0,0,10,0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Button HorizontalAlignment="Right" IsTabStop="False" Height="40" BorderThickness="0" Grid.Row="0" Grid.Column="1"  Command="{Binding IsLiveCommand}" Background="Transparent" >
+                        <fa:IconBlock  FontSize="23">
                             <fa:IconBlock.Style>
                                 <Style TargetType="{x:Type fa:IconBlock}">
                                     <Setter Property="Icon" Value="Eye"></Setter>
-                                    <Setter Property="Foreground" Value="DarkRed"/>
                                     <Setter Property="ToolTip" Value="Auto Refresh On"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsLive}" Value="False">
                                             <Setter Property="Icon" Value="EyeSlash"></Setter>
-                                            <Setter Property="Foreground" Value="Black"/>
                                             <Setter Property="ToolTip" Value="Auto Refresh Off"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -125,7 +126,7 @@
                             </fa:IconBlock.Style>
                         </fa:IconBlock>
                         <Button.Style>
-                            <Style TargetType="{x:Type Button}">
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                                 <Setter Property="Visibility" Value="Visible"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsEnabled" Value="False">
@@ -135,10 +136,10 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <Button HorizontalAlignment="Right" IsTabStop="False" Height="40" Width="40" Background="Transparent" BorderThickness="0" Grid.Row="0" Grid.Column="1"  Command="{Binding RefreshDetailsCommand}" ToolTip="Refresh Item Details" >
+                    <Button HorizontalAlignment="Right" IsTabStop="False" Height="40" Background="Transparent" BorderThickness="0" Grid.Row="0" Grid.Column="1"  Command="{Binding RefreshDetailsCommand}" ToolTip="Refresh Item Details" >
                         <fa:IconBlock Icon="SyncAlt" FontSize="20" />
                         <Button.Style>
-                            <Style TargetType="{x:Type Button}">
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                                 <Setter Property="Visibility" Value="Visible"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsEnabled" Value="False">
@@ -149,12 +150,12 @@
                         </Button.Style>
                     </Button>
 
-                </StackPanel>
+                </ui:SimpleStackPanel>
 
-                <GridSplitter Height="3" Grid.Row="2" ResizeDirection="Rows" HorizontalAlignment="Stretch" Background="DarkGray" IsTabStop="False"></GridSplitter>
-                <TabControl Grid.RowSpan="2" Grid.Row="3" VerticalAlignment="Stretch" x:Name="TabParent" >
+                <GridSplitter Height="3" Grid.Row="2" ResizeDirection="Rows" HorizontalAlignment="Stretch" IsTabStop="False"></GridSplitter>
+                <TabControl Grid.RowSpan="2" Grid.Row="3" VerticalAlignment="Stretch" x:Name="TabParent">
                     <TabItem Header="Properties" IsTabStop="False">
-                        <ListBox x:Name="PropertyListBox" Background="WhiteSmoke" ItemsSource="{Binding Properties}" Grid.IsSharedSizeScope="True"
+                        <ListBox x:Name="PropertyListBox" ItemsSource="{Binding Properties}" Grid.IsSharedSizeScope="True"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
@@ -164,7 +165,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBox Text="{Binding Path=Key}" BorderThickness="1" FontWeight="Bold" IsReadOnly="True"  Padding="5,5,0,0"  HorizontalContentAlignment="Left" Focusable="False" Background="White" ToolTip="{Binding Path=Key}"/>
+                                        <TextBox Text="{Binding Path=Key}" BorderThickness="1" FontWeight="Bold" IsReadOnly="True"  Padding="5,5,0,0"  HorizontalContentAlignment="Left" Focusable="False"  ToolTip="{Binding Path=Key}"/>
                                         <Button Grid.Column="1" Background="Transparent" BorderThickness="0,1,0,1" Command="{Binding DataContext.CopyValueCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding Path=Value}" ToolTip="Copy">
                                             <fa:IconBlock Icon="Copy" FontSize="18">
                                                 <fa:IconBlock.Style>
@@ -176,10 +177,10 @@
                                                             </Trigger>
                                                         </Style.Triggers>
                                                     </Style>
-                                                    </fa:IconBlock.Style>
+                                                </fa:IconBlock.Style>
                                             </fa:IconBlock>
                                         </Button>
-                                        <TextBox Text="{Binding Path=Value}"  Padding="5" Grid.Column="2" IsTabStop="False" IsReadOnly="True" BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="White" Focusable="True"/>
+                                        <TextBox Text="{Binding Path=Value}"  Padding="5" Grid.Column="2" IsTabStop="False" IsReadOnly="True" BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Focusable="True"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -203,23 +204,35 @@
                                             <ColumnDefinition Width="6*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBox Text="{Binding Path=Value}"  Padding="5" Grid.Column="2" IsReadOnly="True" IsTabStop="False" BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"  Focusable="True"/>
+                                        <TextBox Text="{Binding Path=Value}"  Padding="5" Grid.Column="2" IsReadOnly="True" IsTabStop="False" BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"  Focusable="True">
+                                            <TextBox.Style>
+                                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding PatternType, Converter={StaticResource PatternTypeConverter}}" Value="Header">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
                                         <Button Grid.Column="1" Background="Transparent" BorderThickness="0,1,0,1" Command="{Binding DataContext.CopyValueCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding Path=Value}" ToolTip="Copy">
                                             <fa:IconBlock Icon="Copy" FontSize="18">
                                                 <fa:IconBlock.Style>
                                                     <Style TargetType="fa:IconBlock">
                                                         <Setter Property="Foreground" Value="Gray"></Setter>
-
                                                         <Style.Triggers>
                                                             <Trigger Property="IsEnabled" Value="False">
                                                                 <Setter Property="Foreground" Value="LightGray"/>
                                                             </Trigger>
+                                                            <DataTrigger Binding="{Binding PatternType, Converter={StaticResource PatternTypeConverter}}" Value="Header">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
                                                 </fa:IconBlock.Style>
                                             </fa:IconBlock>
                                             <Button.Style>
-                                                <Style TargetType="Button">
+                                                <Style TargetType="Button"  BasedOn="{StaticResource {x:Type Button}}">
                                                     <Setter Property="Visibility" Value="Collapsed"></Setter>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding PatternType, Converter={StaticResource PatternTypeConverter}}" Value="Field">
@@ -229,34 +242,40 @@
                                                 </Style>
                                             </Button.Style>
                                         </Button>
-                                        <Button Grid.Column="1" Background="Transparent" BorderThickness="0,1,0,1" Command="{Binding DataContext.InvokeMethodCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding Path=Method}" ToolTip="Invoke">
+                                        <Button Grid.Column="1"  BorderThickness="0,1,0,1" Command="{Binding DataContext.InvokeMethodCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding Path=Method}" ToolTip="Invoke">
                                             <fa:IconBlock Icon="Play" FontSize="18">
                                                 <fa:IconBlock.Style>
                                                     <Style TargetType="fa:IconBlock">
-                                                        <Setter Property="Foreground" Value="Green"></Setter>
+                                                        <!--<Setter Property="Foreground" Value="Green"></Setter>-->
                                                         <Style.Triggers>
                                                             <Trigger Property="IsEnabled" Value="False">
                                                                 <Setter Property="Foreground" Value="LightGray"/>
                                                             </Trigger>
+                                                            <DataTrigger Binding="{Binding PatternType, Converter={StaticResource PatternTypeConverter}}" Value="Header">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
                                                 </fa:IconBlock.Style>
                                             </fa:IconBlock>
                                             <Button.Style>
-                                                <Style TargetType="Button">
+                                                <Style TargetType="Button"  BasedOn="{StaticResource {x:Type Button}}">
                                                     <Setter Property="Visibility" Value="Collapsed"></Setter>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding PatternType, Converter={StaticResource PatternTypeConverter}}" Value="Method">
                                                             <Setter Property="Visibility" Value="Visible"/>
                                                         </DataTrigger>
+                                                        <DataTrigger Binding="{Binding PatternType, Converter={StaticResource PatternTypeConverter}}" Value="Header">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </Button.Style>
                                         </Button>
-                                        <TextBox Text="{Binding Path=Key}" BorderThickness="1" FontWeight="Bold" Padding="5,5,0,0" Grid.Column="0" IsReadOnly="True" HorizontalAlignment="Stretch"  Focusable="False" ToolTip="{Binding Path=Key}">
+                                        <TextBox Text="{Binding Path=Key}" BorderThickness="1" FontWeight="Bold" Padding="5,5,0,0" Grid.Column="0" IsReadOnly="True"  Focusable="False" ToolTip="{Binding Path=Key}">
                                             <TextBox.Style>
-                                                <Style TargetType="{x:Type TextBox}">
-                                                    <Setter Property="Foreground" Value="Black"></Setter>
+                                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                    <Setter Property="HorizontalAlignment"  Value="Stretch"/>
                                                     <Setter Property="HorizontalContentAlignment" Value="Left"/>
                                                     <Style.Triggers>
                                                         <MultiDataTrigger>
@@ -266,9 +285,9 @@
                                                             </MultiDataTrigger.Conditions>
                                                             <MultiDataTrigger.Setters>
                                                                 <Setter Property="Foreground" Value="Green"/>
+                                                                <Setter Property="HorizontalAlignment"  Value="Stretch"/>
                                                                 <Setter Property="Grid.ColumnSpan" Value="3"/>
                                                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                                                <Setter Property="Background" Value="Lavender"/>
                                                             </MultiDataTrigger.Setters>
                                                         </MultiDataTrigger>
                                                         <MultiDataTrigger>
@@ -278,9 +297,9 @@
                                                             </MultiDataTrigger.Conditions>
                                                             <MultiDataTrigger.Setters>
                                                                 <Setter Property="Foreground" Value="Red"/>
+                                                                <Setter Property="HorizontalAlignment"  Value="Stretch"/>
                                                                 <Setter Property="Grid.ColumnSpan" Value="3"/>
                                                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                                                <Setter Property="Background" Value="Lavender"/>
                                                             </MultiDataTrigger.Setters>
                                                         </MultiDataTrigger>
                                                     </Style.Triggers>
@@ -291,7 +310,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                             <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem" >
+                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                     <Setter Property="Focusable" Value="False"></Setter>
                                     <Setter Property="Padding" Value="0"/>
                                     <Setter Property="Width" Value="{Binding ActualWidth, ElementName=PatternListBox}"/>
@@ -314,7 +333,7 @@
         </Grid>
     </Grid>
     <Window.Style>
-        <Style TargetType="{x:Type Window}">
+        <Style TargetType="{x:Type Window}"  BasedOn="{StaticResource {x:Type Window}}">
             <Setter Property="IsEnabled" Value="True"></Setter>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsSearching}" Value="True">
