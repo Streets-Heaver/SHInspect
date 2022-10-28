@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using ModernWpf;
+using Prism.Commands;
 using SHAutomation.Core;
 using SHAutomation.Core.AutomationElements;
 using SHAutomation.Core.Definitions;
@@ -7,6 +8,7 @@ using SHAutomation.Core.StaticClasses;
 using SHAutomation.UIA3;
 using SHInspect.Classes;
 using SHInspect.Constants;
+using SHInspect.Enums;
 using SHInspect.Extensions;
 using SHInspect.Models;
 using System;
@@ -49,10 +51,12 @@ namespace SHInspect.ViewModels
         public DelegateCommand<string> CopyValueCommand { get; private set; }
         public DelegateCommand <MethodDetails> InvokeMethodCommand { get; private set; }
         public DelegateCommand FocusCommand { get; private set; }
-
+        
         public MainViewModel()
         {
             SearchTerms = new List<string>() { SHInspectConstants.AutomationId, SHInspectConstants.Name, SHInspectConstants.ClassName, SHInspectConstants.ControlType, SHInspectConstants.XPath };
+            ThemeTypes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
+
             AddWindowCommand = new DelegateCommand(AddWindow, CanAddWindow);
             CrashWindowCommand = new DelegateCommand(CrashWindow, CanCrashWindow);
             DeleteWindowCommand = new DelegateCommand(DeleteWindow);
@@ -104,6 +108,7 @@ namespace SHInspect.ViewModels
             Elements = new ObservableCollection<ElementBO>();
             Automation = new UIA3Automation();
             Automation.TransactionTimeout = new TimeSpan(0, 0, 0, 5);
+            SelectedThemeType = (ThemeType)Settings.Default.Theme;
             GetDesktop();
             PropertyChangedEventManager.AddHandler(this, SelectedItemChanged, nameof(SelectedItemInTree));
         }

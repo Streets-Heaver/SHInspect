@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SHInspect.Views"
         mc:Ignorable="d" ResizeMode="NoResize" x:Name="PopupWindow"
-        Title="Add Window" Height="150" Width="400">
+        Title="Add Window" Height="200" Width="500"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        ui:WindowHelper.UseModernWindowStyle="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -18,14 +20,14 @@
             <RowDefinition  Height="Auto" />
             <RowDefinition  Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" Height="20" Background="LightGray" Text=" Automation Id" />
-        <TextBlock Grid.Row="0" Grid.Column="1" Height="20" Background="LightGray" Text=" Name" />
-        <TextBox Grid.Row="1" Margin="0,0,0,10" Grid.Column="0" Height="20" IsReadOnly="True" Text="{Binding SelectedWindow.AutomationId}" />
-        <TextBox Grid.Row="1" Margin="0,0,0,10" Grid.Column="1" Height="20" IsReadOnly="True" Text="{Binding SelectedWindow.Name, UpdateSourceTrigger=PropertyChanged}" />
-        <TextBox Grid.Column="0" Width="180" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="WindowIdentifierBox" Padding="0" Text="{Binding SelectedWindow.Identifier}" Margin="5,0,0,0" />
-        <TextBlock Grid.Column="0" Width="180" Grid.ColumnSpan="2" Grid.Row="2"  IsHitTestVisible="False"  Text="Window Identifier"  Padding="5,0,0,0"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0"  Foreground="DarkGray">
+        <TextBlock Grid.Row="0" Grid.Column="0" Height="20"  Text=" Automation Id" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Height="20" Text=" Name" />
+        <TextBox Grid.Row="1" Margin="10,0,0,10" Grid.Column="0" Height="20" IsReadOnly="True" Text="{Binding SelectedWindow.AutomationId}" />
+        <TextBox Grid.Row="1" Margin="0,0,10,10" Grid.Column="1" Height="20" IsReadOnly="True" Text="{Binding SelectedWindow.Name, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox Grid.Column="0" Width="180" Margin="10,0,0,0" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" x:Name="WindowIdentifierBox" Padding="5,0,0,0"  Text="{Binding SelectedWindow.Identifier}" />
+        <TextBlock Grid.Column="0" Width="180" Grid.ColumnSpan="2" Grid.Row="2"  IsHitTestVisible="False"  Text="Window Identifier"  Padding="5,0,0,0"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" >
             <TextBlock.Style>
-                <Style TargetType="{x:Type TextBlock}">
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Text, ElementName=WindowIdentifierBox}" Value="">

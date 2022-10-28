@@ -24,10 +24,5 @@ namespace SHInspect.Views
             InitializeComponent();
             ErrorTextBox.Text = message;
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

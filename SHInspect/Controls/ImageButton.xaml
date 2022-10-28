@@ -12,7 +12,7 @@
                 <Image Source="{Binding Image, ElementName=imageButton}" Height="{Binding ImageHeight, ElementName=imageButton}" Width="{Binding ImageWidth, ElementName=imageButton}" IsHitTestVisible="False"/>
             </Button.Content>
             <Button.Style>
-                <Style TargetType="{x:Type Button}">
+                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Background" Value="Transparent"></Setter>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">

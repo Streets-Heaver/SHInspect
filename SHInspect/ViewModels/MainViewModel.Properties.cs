@@ -1,9 +1,11 @@
-﻿using SHAutomation.Core;
+﻿using ModernWpf;
+using SHAutomation.Core;
 using SHAutomation.Core.AutomationElements;
 using SHAutomation.Core.Input;
 using SHAutomation.Core.StaticClasses;
 using SHAutomation.UIA3;
 using SHInspect.Classes;
+using SHInspect.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,7 +29,11 @@ namespace SHInspect.ViewModels
         private bool _isSettings;
         private bool _isSearching;
         private List<string> _searchTerms;
+        private List<ThemeType> _ThemeTypes;
+
         private string _selectedSearchTerm;
+        private ThemeType? _selectedThemeType;
+
         private ElementBO _selectedItem;
         private ElementBO _selectedItemInTree;
         private WindowBO _selectedCurrentWindowItem;
@@ -47,12 +53,12 @@ namespace SHInspect.ViewModels
         private bool _isInspecting;
         public DispatcherTimer _dispatcherTimer;
         private DateTime _previousRefresh;
-
         public bool Inspecting
         {
             get { return _isInspecting; }
             set { _isInspecting = value; }
         }
+        
         public string SearchText
         {
             get { return _searchText; }
@@ -101,7 +107,18 @@ namespace SHInspect.ViewModels
                 }
             }
         }
-
+        public List<ThemeType> ThemeTypes
+        {
+            get { return _ThemeTypes; }
+            set
+            {
+                if (_ThemeTypes != value)
+                {
+                    _ThemeTypes = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
         public string SelectedSearchTerm
         {
             get { return _selectedSearchTerm; }
@@ -113,7 +130,24 @@ namespace SHInspect.ViewModels
                 RaisePropertyChanged();
             }
         }
-
+        public ThemeType? SelectedThemeType
+        {
+            get { return _selectedThemeType; }
+            set
+            {
+                _selectedThemeType = value;
+                Settings.Default.Theme = value != null ? (int)value : 0;
+                switch (value)
+                {
+                    case 0: ThemeManager.Current.ApplicationTheme = null; break;
+                    default:
+                        ThemeManager.Current.ApplicationTheme = (ApplicationTheme)(value) - 1;
+                        break;
+                }
+                Settings.Default.Save();
+                RaisePropertyChanged();
+            }
+        }
         public ElementBO SelectedItem
         {
             get { return _selectedItem; }

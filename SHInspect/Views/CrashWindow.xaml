@@ -4,8 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SHInspect.Views"
-        mc:Ignorable="d" Background="Red"
-        Title="Unhandled Exception" Height="450" Width="450">
+        mc:Ignorable="d" 
+        Title="Unhandled Exception" Height="450" Width="450"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:converters="clr-namespace:SHInspect.Converters"
+        ui:WindowHelper.UseModernWindowStyle="True">
+    <Window.Resources>
+        <converters:ThemeTypeConverter x:Key="ThemeTypeConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -13,18 +19,55 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBox Margin="10" Background="Transparent" BorderThickness="0"  Foreground="White" Grid.Row="0" Grid.ColumnSpan="3" x:Name="ErrorTextBox" TextWrapping="WrapWithOverflow" IsReadOnly="True"></TextBox>
-        <Grid Margin="10"  Grid.Row="1" Grid.Column="1">
+        <Grid   Grid.Row="1" Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Content="Restart" Command="{Binding RestartCommand}" Margin="5" Grid.Column="0"/>
-            <Button Content="Exit" Command="{Binding CloseCommand}" Margin="5" Grid.Column="1"/>
+            <Button Content="Restart" MinWidth="70" Command="{Binding RestartCommand}" Margin="5" Grid.Column="0" BorderBrush="Transparent" >
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="LightGray"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedThemeType, Converter={StaticResource ThemeTypeConverter}}" Value="Dark">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" Value="DimGray"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="Exit" MinWidth="70" Command="{Binding CloseCommand}" Margin="5" Grid.Column="1" BorderBrush="Transparent" >
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="LightGray"/>
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedThemeType, Converter={StaticResource ThemeTypeConverter}}" Value="Dark">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" Value="DimGray"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
         
     </Grid>
+    <Window.Style>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="Background" Value="Red"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SelectedThemeType, Converter={StaticResource ThemeTypeConverter}}" Value="Dark">
+                    <Setter Property="Background" Value="Black"/>
+                    <Setter Property="BorderThickness" Value="3"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
 </Window>
