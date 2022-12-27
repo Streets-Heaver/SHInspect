@@ -11,76 +11,131 @@
         xmlns:ui="http://schemas.modernwpf.com/2019">
     <UserControl.Resources>
         <converters:ThemeTypeConverter x:Key="ThemeTypeConverter"/>
+        <converters:NumericValueConverter x:Key="numericValueConverter" />
+        <Style TargetType="HeaderedContentControl">
+            <Setter Property="Margin" Value="0,0,0,28" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock
+                            Text="{Binding}"
+                            Style="{StaticResource BaseTextBlockStyle}"
+                            Margin="10,0,10,16" />
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ui:SimpleStackPanel">
+            <Setter Property="Spacing" Value="12" />
+        </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="20,0">
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="20" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="Settings" />
+        <TextBlock Text="Settings" FontSize="24" Margin="10" />
 
-        <GroupBox Margin="10" Header="Windows To Display">
-            <ListBox ItemsSource="{Binding SavedSettingsWindows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="0" Grid.Column="0" Margin="5" SelectedItem="{Binding SelectedExistingWindowItem, Mode=TwoWay}">
-                <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                            </Grid>
-                            <TextBlock Grid.Column="0" Text="{Binding Path=Identifier}"/>
-                            <TextBlock Grid.Column="1" Text="(temporary)" FontStyle="Italic"  Foreground="Red" Padding="5,0,0,0">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                        <Setter Property="Visibility" Value="Collapsed"></Setter>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=IsTemporary}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        </GroupBox>
-        <GroupBox Header="Active Windows" Grid.Row="0" Grid.Column="2">
-            <ListBox ItemsSource="{Binding SettingsWindowList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="5" SelectedItem="{Binding SelectedCurrentWindowItem, Mode=TwoWay}" >
-                <i:Interaction.Behaviors>
-                    <behaviours:BindableListBoxDoubleClickBehaviour/>
-                </i:Interaction.Behaviors>
-                <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock >
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} {1}">
-                                    <Binding Path="Name" />
-                                    <Binding Path="AutomationId" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        </GroupBox>
-        <GroupBox  Grid.Row="2" Grid.ColumnSpan="3" Margin="10">
-        <Grid Grid.Row="2" HorizontalAlignment="Stretch">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
+        <HeaderedContentControl Header="Windows To Display" Grid.Row="1" >
+            <ui:SimpleStackPanel Margin="5">
+                <ListBox x:Name="WindowsToDisplay" ItemsSource="{Binding SavedSettingsWindows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  SelectedItem="{Binding SelectedExistingWindowItem, Mode=TwoWay}">
+                    <i:Interaction.Behaviors>
+                        <behaviours:BindableListBoxDoubleClickBehaviour/>
+                    </i:Interaction.Behaviors>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                </Grid>
+                                <TextBlock Grid.Column="0" Text="{Binding Path=Identifier}"/>
+                                <TextBlock Grid.Column="1" Text="(temporary)" FontStyle="Italic"  Foreground="Red" Padding="5,0,0,0">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=IsTemporary}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ui:SimpleStackPanel>
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Header="Active Windows" Grid.Column="1" Grid.Row="1" >
+            <ui:SimpleStackPanel Margin="5">
+                <ListBox x:Name="ActiveWindows" ItemsSource="{Binding SettingsWindowList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  SelectedItem="{Binding SelectedCurrentWindowItem, Mode=TwoWay}" >
+                    <i:Interaction.Behaviors>
+                        <behaviours:BindableListBoxDoubleClickBehaviour/>
+                    </i:Interaction.Behaviors>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock >
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding Path="Name" />
+                                            <Binding Path="AutomationId" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ui:SimpleStackPanel>
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Header="Hover Over"  Grid.Row="2" >
+            <ui:SimpleStackPanel Margin="5">
+                <CheckBox Content="Select Element With Mouse Hover" ToolTip="Use this mode to manually select elements when clicking closes the element ie popups"  IsChecked="{Binding HoverSelect,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+                <TextBox ui:ControlHelper.Header="Hover Select Time (ms)"  Text="{Binding HoverSelectTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource numericValueConverter}}"   />
+
+            </ui:SimpleStackPanel>
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Header="Theming"  Grid.Row="2" Grid.Column="1">
+            <ui:SimpleStackPanel Margin="5">
+                <xctk:ColorPicker  SelectedColor="{Binding SelectedColour,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"  HorizontalAlignment="Left" ShowStandardColors="False" ShowRecentColors="False" ShowTabHeaders="False"  Background="Transparent" AvailableColorsSortingMode="HueSaturationBrightness">
+                    <xctk:ColorPicker.Style>
+                        <Style TargetType="{x:Type xctk:ColorPicker}" BasedOn="{StaticResource {x:Type xctk:ColorPicker}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedThemeType, Converter={StaticResource ThemeTypeConverter}}" Value="Dark">
+                                    <Setter Property="HeaderForeground" Value="White"/>
+                                    <Setter Property="HeaderBackground" Value="Black"/>
+                                    <Setter Property="DropDownBackground" Value="Black"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </xctk:ColorPicker.Style>
+                </xctk:ColorPicker>
+                <ComboBox ui:ControlHelper.Header="Theme"   ItemsSource="{Binding ThemeTypes}" SelectedItem="{Binding SelectedThemeType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </ui:SimpleStackPanel>
+        </HeaderedContentControl>
+
+        <!--<GroupBox  Grid.Row="2" Grid.ColumnSpan="3" Margin="10">
+            <Grid Grid.Row="2" HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -90,12 +145,13 @@
                     <RowDefinition  Height="Auto" />
                     <RowDefinition  Height="Auto" />
                 </Grid.RowDefinitions>
+
                 <TextBlock Grid.Row="0" Grid.Column="0" Height="20" Text="Automation Id"/>
                 <TextBlock Grid.Row="0" Grid.Column="1" Height="20" Text="Name" />
                 <TextBox Grid.Row="1" Margin="0,0,0,10" Grid.Column="0" Height="20" IsReadOnly="True" Text="{Binding SelectedWindowItem.AutomationId}"/>
                 <TextBox Grid.Row="1" Margin="0,0,0,10" Grid.Column="1" Height="20" IsReadOnly="True" Text="{Binding SelectedWindowItem.Name}" />
                 <TextBox Grid.Column="0" Width="300" Grid.ColumnSpan="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Stretch" x:Name="WindowIdentifierBox" Padding="5,0,0,0" Text="{Binding IdentifierToAdd, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" VerticalContentAlignment="Center"/>
-               
+
                 <TextBlock Grid.Column="0" Width="300" Grid.ColumnSpan="2" Grid.Row="2"  IsHitTestVisible="False"  Text="Window Identifier"  Padding="5,0,0,0"  VerticalAlignment="Center" HorizontalAlignment="Center"  Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
@@ -150,8 +206,10 @@
                     </Style.Triggers>
                 </Style>
             </GroupBox.Style>
-        </GroupBox>
-        <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Margin="20">
+        </GroupBox>-->
+        <!--<Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Margin="20">
+
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition  Width="Auto"/>
@@ -159,25 +217,24 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <CheckBox Content="Select Element With Mouse Hover" ToolTip="Use this mode to manually select elements when clicking closes the element ie popups" Grid.Column="0" IsChecked="{Binding HoverSelect,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="10,0,0,0"/>
+           
+            <TextBlock Text="Hover Select Time (ms):" HorizontalAlignment="Left" Grid.Row="1"  VerticalAlignment="Center" FontSize="15" Padding="0,0,5,0"/>
+            
+
+            
             <TextBlock Text="Inspection Colour:" HorizontalAlignment="Left"  Grid.Column="1" VerticalAlignment="Center" FontSize="15" Padding="0,0,5,0"/>
-            <xctk:ColorPicker Grid.Column="2" SelectedColor="{Binding SelectedColour,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" MinWidth="200"   HorizontalAlignment="Left" ShowStandardColors="False" ShowRecentColors="False" ShowTabHeaders="False"  Background="Transparent" AvailableColorsSortingMode="HueSaturationBrightness">
-                <xctk:ColorPicker.Style>
-                    <Style TargetType="{x:Type xctk:ColorPicker}" BasedOn="{StaticResource {x:Type xctk:ColorPicker}}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding SelectedThemeType, Converter={StaticResource ThemeTypeConverter}}" Value="Dark">
-                                <Setter Property="HeaderForeground" Value="White"/>
-                                <Setter Property="HeaderBackground" Value="Black"/>
-                                <Setter Property="DropDownBackground" Value="Black"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </xctk:ColorPicker.Style>
-            </xctk:ColorPicker>
+            
+            
+            
             <TextBlock Text="Theme:" HorizontalAlignment="Left"  Grid.Column="3" VerticalAlignment="Center" FontSize="15" Padding="0,0,5,0"/>
-            <ComboBox Grid.Column="4" MinWidth="200"  ItemsSource="{Binding ThemeTypes}" SelectedItem="{Binding SelectedThemeType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-        </Grid>
-        <Button Content="Test Crash" Margin="5" Grid.ColumnSpan="3" HorizontalAlignment="Center" Width="200" Grid.Row="4" Command="{Binding CrashWindowCommand}"/>
+            
+        </Grid>-->
+        <!--<Button Content="Test Crash" Margin="5" Grid.ColumnSpan="3" HorizontalAlignment="Center" Width="200" Grid.Row="4" Command="{Binding CrashWindowCommand}"/>-->
     </Grid>
 </UserControl>
+             

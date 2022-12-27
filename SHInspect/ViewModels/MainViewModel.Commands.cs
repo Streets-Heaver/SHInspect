@@ -5,7 +5,7 @@ namespace SHInspect.ViewModels
 {
     public partial class MainViewModel : ViewModelBase
     {
-        public DelegateCommand AddWindowCommand { get; private set; }
+        public DelegateCommand<WindowBO> AddWindowCommand { get; private set; }
         public DelegateCommand CrashWindowCommand { get; private set; }
         public DelegateCommand DeleteWindowCommand { get; private set; }
         public DelegateCommand SearchCommand { get; private set; }
@@ -19,7 +19,7 @@ namespace SHInspect.ViewModels
         public DelegateCommand GoToParentCommand { get; private set; }
         public DelegateCommand GoToRootCommand { get; private set; }
         public DelegateCommand MakeTemporaryCommand { get; private set; }
-        public DelegateCommand RemoveWindowCommand { get; private set; }
+        public DelegateCommand<WindowBO> RemoveWindowCommand { get; private set; }
         public DelegateCommand<string> CopyValueCommand { get; private set; }
         public DelegateCommand<MethodDetails> InvokeMethodCommand { get; private set; }
         public DelegateCommand FocusCommand { get; private set; }

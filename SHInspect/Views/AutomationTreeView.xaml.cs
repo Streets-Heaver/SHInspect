@@ -17,12 +17,11 @@ namespace SHInspect.Views
         DispatcherTimer _hoverTimer;
         private int _hoverCount;
         private ItemsControl _hoveredItem;
+        private int _hoverSelectTime;
         public AutomationTreeView()
         {
             InitializeComponent();
-            _hoverTimer = new DispatcherTimer();
-            _hoverTimer.Interval = TimeSpan.FromMilliseconds(700);
-            _hoverTimer.Tick += OnHoverTimerTick;
+           
 
         }
         private void TreeViewSelectedHandler(object sender, RoutedEventArgs e)
@@ -74,10 +73,26 @@ namespace SHInspect.Views
 
         private void TreeViewMouseEnterSelectedHandler(object sender, RoutedEventArgs e)
         {
+            if (_hoverTimer == null)
+            {
+                _hoverTimer = new DispatcherTimer();
+                _hoverSelectTime = (DataContext as MainViewModel).HoverSelectTime;
+                _hoverTimer.Interval = TimeSpan.FromMilliseconds(_hoverSelectTime);
+                _hoverTimer.Tick += OnHoverTimerTick;
+            }
+
+            if ((DataContext as MainViewModel).HoverSelectTime != _hoverSelectTime)
+            {
+                _hoverSelectTime = (DataContext as MainViewModel).HoverSelectTime;
+                _hoverTimer.Stop();
+                _hoverTimer.Interval = TimeSpan.FromMilliseconds(_hoverSelectTime);
+                _hoverTimer.Start();
+            }
 
             _hoverTimer.Start();
             _hoverCount = 0;
             _hoveredItem = sender as ItemsControl;
+
         }
 
 

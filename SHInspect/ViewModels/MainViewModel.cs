@@ -28,7 +28,7 @@ namespace SHInspect.ViewModels
             SearchTerms = new List<string>() { SHInspectConstants.AutomationId, SHInspectConstants.Name, SHInspectConstants.ClassName, SHInspectConstants.ControlType, SHInspectConstants.XPath };
             ThemeTypes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
 
-            AddWindowCommand = new DelegateCommand(AddWindow, CanAddWindow);
+            AddWindowCommand = new DelegateCommand<WindowBO>(AddWindow, CanAddWindow);
             CrashWindowCommand = new DelegateCommand(CrashWindow, CanCrashWindow);
             DeleteWindowCommand = new DelegateCommand(DeleteWindow);
             RefreshGridCommand = new DelegateCommand(RefreshGrid);
@@ -42,8 +42,8 @@ namespace SHInspect.ViewModels
             FocusCommand = new DelegateCommand(FocusElement, () => SelectedItemInTree != null && SelectedItemInTree.AutomationElement.IsPropertySupportedDirect(new SHAutomation.Core.Identifiers.PropertyId(30009, SHInspectConstants.IsKeyboardFocusable)));
             GoToParentCommand = new DelegateCommand(GoToParent, CanGoToParent);
             GoToRootCommand = new DelegateCommand(GoToRoot, CanGoToRoot);
-            RemoveWindowCommand = new DelegateCommand(RemoveWindow, CanRemoveWindow);
-            MakeTemporaryCommand = new DelegateCommand(MakeTemporary, CanRemoveWindow);
+            RemoveWindowCommand = new DelegateCommand<WindowBO>(RemoveWindow, CanRemoveWindow);
+            //MakeTemporaryCommand = new DelegateCommand(MakeTemporary, CanRemoveWindow);
 
             CopyValueCommand = new DelegateCommand<string>(CopyValue, CanCopyValue);
             InvokeMethodCommand = new DelegateCommand<MethodDetails>(InvokeMethod, CanInvokeMethod);
@@ -59,8 +59,9 @@ namespace SHInspect.ViewModels
             var savedWins = Settings.Default.Windows;
             var inspectColour = Settings.Default.InspectionColour;
             HoverSelect = Settings.Default.HoverSelect;
+            HoverSelectTime = Settings.Default.HoverSelectTime;
 
-            SelectedColour = new System.Windows.Media.Color()
+            SelectedColour = new Color()
             {
                 A = inspectColour.A,
                 R = inspectColour.R,
@@ -240,8 +241,8 @@ namespace SHInspect.ViewModels
             {
                 method.Method.Invoke(method.TargetObject, null);
             }
-            catch(Exception)
-            { 
+            catch (Exception)
+            {
             }
         }
         public void ChangeLiveState()
@@ -370,11 +371,12 @@ namespace SHInspect.ViewModels
             string[] wins = SavedSettingsWindows.Where(x => !x.IsTemporary).Select(x => x.Identifier).ToArray();
             newCollection.AddRange(wins);
             Settings.Default.HoverSelect = HoverSelect;
+            Settings.Default.HoverSelectTime = HoverSelectTime;
             Settings.Default.Windows = newCollection;
             Settings.Default.InspectionColour = System.Drawing.Color.FromArgb(SelectedColour.A, SelectedColour.R, SelectedColour.G, SelectedColour.B);
             Settings.Default.Save();
         }
-        public bool CanAddWindow()
+        public bool CanAddWindow(WindowBO window)
         {
             return IdentifierToAdd != null && !string.IsNullOrEmpty(IdentifierToAdd.Trim()) && !SavedSettingsWindows.Any(x => x.Identifier == IdentifierToAdd);
         }
@@ -391,23 +393,22 @@ namespace SHInspect.ViewModels
         {
             throw new TestCrashException("You pressed the 'Test Crash' button so I crashed!");
         }
-        public void AddWindow()
+
+        public void RemoveWindow(WindowBO window)
         {
-            var item = new WindowBO(IdentifierToAdd, false);
-            if (item.IsCurrent)
-            {
-                item.IsCurrent = false;
-                SavedSettingsWindows.Add(item);
-                SelectedCurrentWindowItem = null;
-            }
-            else
-            {
-                SavedSettingsWindows.Remove(SelectedWindowItem);
-                item.IsTemporary = SelectedWindowItem.IsTemporary;
-                SavedSettingsWindows.Add(item);
-                SelectedCurrentWindowItem = null;
-            }
-            IdentifierToAdd = null;
+            if (SavedSettingsWindows.Any(a => a.Identifier == window.Identifier))
+                SavedSettingsWindows.Remove(window);
+
+           
+            UpdateSettingsWindowList();
+            GetDesktop();
+        }
+
+        public void AddWindow(WindowBO window)
+        {
+            if (!SavedSettingsWindows.Any(a => a.Identifier == window.Identifier))
+                SavedSettingsWindows.Add(window);
+
             RefreshWindows();
         }
         public bool CanSearch()
@@ -514,17 +515,7 @@ namespace SHInspect.ViewModels
                 return false;
             }
         }
-        public void RemoveWindow()
-        {
-            var win = new WindowBO(SelectedItemInTree.AutomationElement, false);
-            var savedWindows = SavedSettingsWindows.Where(x => x.Identifier == win.Identifier).ToList();
-            foreach (var delWindow in savedWindows)
-            {
-                SavedSettingsWindows.Remove(delWindow);
-            }
-            UpdateSettingsWindowList();
-            GetDesktop();
-        }
+
         public void MakeTemporary()
         {
             var win = new WindowBO(SelectedItemInTree.AutomationElement, false);
@@ -546,7 +537,7 @@ namespace SHInspect.ViewModels
             UpdateSettingsWindowList();
             GetDesktop();
         }
-        public bool CanRemoveWindow()
+        public bool CanRemoveWindow(WindowBO window)
         {
             return SelectedItemInTree != null && SelectedItemInTree.AutomationElement != null && (SelectedItemInTree.AutomationElement.Parent == null || SelectedItemInTree.AutomationElement.Parent.Equals(DesktopItem));
         }
@@ -574,13 +565,13 @@ namespace SHInspect.ViewModels
             if (element.RootElement == null)
             {
                 var id = element?.AutomationElement?.ProcessId ?? -1;
-                if(id < 0)
+                if (id < 0)
                 {
                     return null;
                 }
                 var root = Elements.FirstOrDefault(x => x.AutomationElement.ProcessId == id);
 
-                if(root != null)
+                if (root != null)
                 {
                     return root.AutomationElement;
                 }
@@ -609,7 +600,7 @@ namespace SHInspect.ViewModels
             {
                 return element.RootElement;
             }
-       
+
         }
     }
 }

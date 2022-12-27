@@ -33,7 +33,7 @@ namespace SHInspect.ViewModels
         private ObservableCollection<ElementBO> _elements;
         private ISHAutomationElement[] _searchResults;
         private int _currentSearchIndex;
-        private System.Windows.Media.Color _selectedColour;
+        private Color _selectedColour;
         private bool _hoverSelect;
         private int _hoverSelectTime;
         private UIA3Automation _automation;
@@ -49,7 +49,7 @@ namespace SHInspect.ViewModels
             get { return _isInspecting; }
             set { _isInspecting = value; }
         }
-        
+
         public string SearchText
         {
             get { return _searchText; }
