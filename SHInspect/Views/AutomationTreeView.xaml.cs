@@ -3,17 +3,8 @@ using SHAutomation.Core.AutomationElements;
 using SHInspect.Classes;
 using SHInspect.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace SHInspect.Views
@@ -37,7 +28,7 @@ namespace SHInspect.Views
         private void TreeViewSelectedHandler(object sender, RoutedEventArgs e)
         {
             var item = sender as ItemsControl;
-            this.Tag = item;
+            Tag = item;
             item.Focus();
             if (item != null)
             {
@@ -59,7 +50,7 @@ namespace SHInspect.Views
                 {
                     if (_hoveredItem != null)
                     {
-                        this.Tag = _hoveredItem;
+                        Tag = _hoveredItem;
                         _hoveredItem.Focus();
 
                         _hoveredItem.BringIntoView();
@@ -68,7 +59,6 @@ namespace SHInspect.Views
                         {
                             treeItem.IsExpanded = true;
                         }
-                        //e.Handled = true;
 
                     }
                 }

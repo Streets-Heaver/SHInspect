@@ -2,14 +2,9 @@
 using SHAutomation.Core.AutomationElements;
 using SHAutomation.Core.Conditions;
 using SHAutomation.Core.Definitions;
-using SHInspect.Classes;
-using SHInspect.Constants;
 using SHInspect.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Media;
 
 namespace SHInspect.Classes
 {

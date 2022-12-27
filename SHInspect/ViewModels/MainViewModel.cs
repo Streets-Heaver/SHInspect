@@ -1,28 +1,20 @@
-﻿using ModernWpf;
-using Prism.Commands;
-using SHAutomation.Core;
+﻿using Prism.Commands;
 using SHAutomation.Core.AutomationElements;
 using SHAutomation.Core.Definitions;
-using SHAutomation.Core.Exceptions;
-using SHAutomation.Core.StaticClasses;
 using SHAutomation.UIA3;
 using SHInspect.Classes;
 using SHInspect.Constants;
 using SHInspect.Enums;
 using SHInspect.Extensions;
-using SHInspect.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml.XPath;
@@ -31,27 +23,6 @@ namespace SHInspect.ViewModels
 {
     public partial class MainViewModel : ViewModelBase
     {
-
-        private ITreeWalker _treeWalker;
-        public DelegateCommand AddWindowCommand { get; private set; }
-        public DelegateCommand CrashWindowCommand { get; private set; }
-        public DelegateCommand DeleteWindowCommand { get; private set; }
-        public DelegateCommand SearchCommand { get; private set; }
-        public DelegateCommand RefreshGridCommand { get; private set; }
-        public DelegateCommand RefreshWindowsCommand { get; private set; }
-        public DelegateCommand RefreshDetailsCommand { get; private set; }
-        public DelegateCommand IsLiveCommand { get; private set; }
-        public DelegateCommand CopyXPathCommand { get; private set; }
-        public DelegateCommand NextResultCommand { get; private set; }
-        public DelegateCommand PreviousResultCommand { get; private set; }
-        public DelegateCommand GoToParentCommand { get; private set; }
-        public DelegateCommand GoToRootCommand { get; private set; }
-        public DelegateCommand MakeTemporaryCommand { get; private set; }
-        public DelegateCommand RemoveWindowCommand { get; private set; }
-        public DelegateCommand<string> CopyValueCommand { get; private set; }
-        public DelegateCommand <MethodDetails> InvokeMethodCommand { get; private set; }
-        public DelegateCommand FocusCommand { get; private set; }
-        
         public MainViewModel()
         {
             SearchTerms = new List<string>() { SHInspectConstants.AutomationId, SHInspectConstants.Name, SHInspectConstants.ClassName, SHInspectConstants.ControlType, SHInspectConstants.XPath };

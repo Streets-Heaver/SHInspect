@@ -1,21 +1,14 @@
-﻿using SHAutomation.Core;
-using SHAutomation.Core.AutomationElements;
+﻿using SHAutomation.Core.AutomationElements;
 using SHAutomation.Core.Input;
 using SHAutomation.Core.StaticClasses;
 using SHInspect.Classes;
 using SHInspect.Views;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Threading;
 
 namespace SHInspect.ViewModels
 {

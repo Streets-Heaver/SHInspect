@@ -1,8 +1,5 @@
 ﻿using Prism.Commands;
-using SHInspect.Classes;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Linq;
 using SHInspect.Enums;
