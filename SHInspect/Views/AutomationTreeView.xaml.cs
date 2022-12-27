@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SHInspect.Views
 {
@@ -22,9 +23,16 @@ namespace SHInspect.Views
     /// </summary>
     public partial class AutomationTreeView : UserControl
     {
+        DispatcherTimer _hoverTimer;
+        private int _hoverCount;
+        private ItemsControl _hoveredItem;
         public AutomationTreeView()
         {
             InitializeComponent();
+            _hoverTimer = new DispatcherTimer();
+            _hoverTimer.Interval = TimeSpan.FromMilliseconds(700);
+            _hoverTimer.Tick += OnHoverTimerTick;
+
         }
         private void TreeViewSelectedHandler(object sender, RoutedEventArgs e)
         {
@@ -38,24 +46,48 @@ namespace SHInspect.Views
             }
         }
 
-        private void TreeViewMouseEnterSelectedHandler(object sender, RoutedEventArgs e)
+        private void OnHoverTimerTick(object sender, EventArgs e)
         {
-            if ((DataContext as MainViewModel).HoverSelect)
+            _hoverCount++;
+            if (_hoverCount >= 2)
             {
-                var item = sender as ItemsControl;
-                this.Tag = item;
-                item.Focus();
-                if (item != null)
+                // Select the item
+                _hoverTimer.Stop();
+                _hoverCount = 0;
+
+                if ((DataContext as MainViewModel).HoverSelect)
                 {
-                    item.BringIntoView();
-                    TreeViewItem treeItem = (item as TreeViewItem);
-                    if (!treeItem.IsExpanded)
+                    if (_hoveredItem != null)
                     {
-                        treeItem.IsExpanded = true;
+                        this.Tag = _hoveredItem;
+                        _hoveredItem.Focus();
+
+                        _hoveredItem.BringIntoView();
+                        TreeViewItem treeItem = (_hoveredItem as TreeViewItem);
+                        if (!treeItem.IsExpanded)
+                        {
+                            treeItem.IsExpanded = true;
+                        }
+                        //e.Handled = true;
+
                     }
-                    e.Handled = true;
                 }
             }
+        }
+
+        private void TreeViewMouseLeaveSelectedHandler(object sender, RoutedEventArgs e)
+        {
+            _hoverTimer.Stop();
+            _hoverCount = 0;
+            _hoveredItem = null;
+        }
+
+        private void TreeViewMouseEnterSelectedHandler(object sender, RoutedEventArgs e)
+        {
+
+            _hoverTimer.Start();
+            _hoverCount = 0;
+            _hoveredItem = sender as ItemsControl;
         }
 
 

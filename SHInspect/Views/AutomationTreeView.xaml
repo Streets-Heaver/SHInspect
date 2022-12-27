@@ -60,6 +60,7 @@
                             <EventSetter Event="Selected" Handler="TreeViewSelectedHandler" />
                             <EventSetter Event="MouseDown" Handler="TreeViewSelectedHandler" />
                             <EventSetter Event="MouseEnter" Handler="TreeViewMouseEnterSelectedHandler" />
+                            <EventSetter Event="MouseLeave" Handler="TreeViewMouseLeaveSelectedHandler" />
                             <Style.Triggers>
 
                                 <DataTrigger Binding="{Binding IsTemporary}" Value="True">
