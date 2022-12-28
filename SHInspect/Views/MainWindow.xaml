@@ -33,7 +33,7 @@
                             SearchTerms="{Binding SearchTerms}" SelectedSearchTerm="{Binding SelectedSearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             PlaceHolderText="Search for something..." Grid.Column="0" Grid.Row="0" FontSize="15"  HorizontalAlignment="Stretch">
         </controls:SearchBox>
-       
+
         <views:SettingsView Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3">
             <views:SettingsView.Style>
                 <Style TargetType="views:SettingsView">
@@ -140,20 +140,24 @@
                 </ui:SimpleStackPanel>
 
                 <GridSplitter Height="3" Grid.Row="2" ResizeDirection="Rows" HorizontalAlignment="Stretch" IsTabStop="False"></GridSplitter>
-                <TabControl Grid.RowSpan="2" Grid.Row="3" VerticalAlignment="Stretch" x:Name="TabParent">
+                <TabControl Grid.RowSpan="2" Grid.Row="3"  x:Name="TabParent">
                     <TabItem Header="Properties" IsTabStop="False">
-                        <ListBox x:Name="PropertyListBox" ItemsSource="{Binding Properties}" Grid.IsSharedSizeScope="True"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox x:Name="PropertyListBox" ItemsSource="{Binding Properties}" >
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Focusable="False" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=PropertyListBox}">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" SharedSizeGroup="FieldColumn"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="3*"/>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="6*"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBox Text="{Binding Path=Key}" BorderThickness="1" FontWeight="Bold" IsReadOnly="True"  Padding="5,5,0,0"  HorizontalContentAlignment="Left" Focusable="False"  ToolTip="{Binding Path=Key}"/>
-                                        <Button Grid.Column="1" Background="Transparent" BorderThickness="0,1,0,1" Command="{Binding DataContext.CopyValueCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding Path=Value}" ToolTip="Copy">
+                                        <TextBlock Text="{Binding Path=Key}"  FontWeight="Bold" 
+                                                 Padding="5" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"   ToolTip="{Binding Path=Key}"/>
+                                        
+                                        
+                                        <Button Grid.Column="1" Background="Transparent" BorderThickness="0,1,0,1"
+                                                Command="{Binding DataContext.CopyValueCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                                CommandParameter="{Binding Path=Value}" ToolTip="Copy">
                                             <fa:IconBlock Icon="Copy" FontSize="18">
                                                 <fa:IconBlock.Style>
                                                     <Style TargetType="fa:IconBlock">
@@ -167,7 +171,8 @@
                                                 </fa:IconBlock.Style>
                                             </fa:IconBlock>
                                         </Button>
-                                        <TextBox Text="{Binding Path=Value}"  Padding="5" Grid.Column="2" IsTabStop="False" IsReadOnly="True" BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Focusable="True"/>
+                                        <TextBox Text="{Binding Path=Value}"  Padding="5" Grid.Column="2" Margin="10,0"
+                                                 IsTabStop="False" IsReadOnly="True" BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Focusable="True"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -184,14 +189,15 @@
                         <ListBox x:Name="PatternListBox" BorderThickness="0" ItemsSource="{Binding Patterns}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid  Focusable="False"  HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=PatternListBox}">
+                                    <Grid  Focusable="False"  HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=PatternListBox}" >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="2*"/>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="6*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBox Text="{Binding Path=Value}"  Padding="5" Grid.Column="2" IsReadOnly="True" IsTabStop="False" BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"  Focusable="True">
+                                        <TextBox Text="{Binding Path=Value}"  Padding="5" Grid.Column="2" IsReadOnly="True" IsTabStop="False" 
+                                                 BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"  Focusable="True">
                                             <TextBox.Style>
                                                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                                     <Style.Triggers>
@@ -259,7 +265,8 @@
                                                 </Style>
                                             </Button.Style>
                                         </Button>
-                                        <TextBox Text="{Binding Path=Key}" BorderThickness="1" FontWeight="Bold" Padding="5,5,0,0" Grid.Column="0" IsReadOnly="True"  Focusable="False" ToolTip="{Binding Path=Key}">
+                                        <TextBox Text="{Binding Path=Key}" BorderThickness="1" FontWeight="Bold" Padding="5,5,0,0"
+                                                 Grid.Column="0" IsReadOnly="True"  Focusable="False" ToolTip="{Binding Path=Key}">
                                             <TextBox.Style>
                                                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
                                                     <Setter Property="HorizontalAlignment"  Value="Stretch"/>

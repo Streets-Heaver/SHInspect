@@ -208,8 +208,8 @@ namespace SHInspect.ViewModels
 
             if (Properties != null && newProperties != null)
             {
-                var output = Properties.Intersect(newProperties, new DetailBOComparer()).Count();
-                if (output != Properties.Count)
+                var output = Properties.Intersect(newProperties, new DetailBOComparer());
+                if (output.Count() != Properties.Count)
                 {
                     Properties = newProperties;
                     Patterns = SelectedItemInTree != null ? AutomationHelpers.GetElementDetailViewModelPatterns(SelectedItemInTree.AutomationElement) : null;

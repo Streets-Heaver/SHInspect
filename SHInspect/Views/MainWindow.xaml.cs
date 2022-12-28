@@ -13,7 +13,9 @@ namespace SHInspect
         {
             DataContext = new MainViewModel();
             InitializeComponent();
-            Title = Assembly.GetExecutingAssembly().GetName().Name + " " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var assembly = Assembly.GetExecutingAssembly();
+            var name = assembly.GetName();
+            Title = $"{name.Name} {name.Version.Major}.{name.Version.Minor}.{name.Version.Build}";
         }
 
        
