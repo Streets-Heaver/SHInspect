@@ -6,7 +6,7 @@ namespace SHInspect.Classes
     {
         public bool Equals(DetailBO x, DetailBO y)
         {
-            return x.Equals(y);
+            return x.Key == y.Key && x.Value == y.Value;
         }
 
         public int GetHashCode(DetailBO obj)

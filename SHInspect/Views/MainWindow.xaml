@@ -145,7 +145,7 @@
                         <ListBox x:Name="PropertyListBox" ItemsSource="{Binding Properties}" >
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Focusable="False" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=PropertyListBox}">
+                                    <Grid Margin="0,3" Focusable="False" HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=PropertyListBox}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="3*"/>
                                             <ColumnDefinition Width="Auto" />
@@ -189,7 +189,7 @@
                         <ListBox x:Name="PatternListBox" BorderThickness="0" ItemsSource="{Binding Patterns}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid  Focusable="False"  HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=PatternListBox}" >
+                                    <Grid Margin="0,3" Focusable="False"  HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=PatternListBox}" >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="3*"/>
                                             <ColumnDefinition Width="Auto" />
