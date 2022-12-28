@@ -399,8 +399,7 @@ namespace SHInspect.ViewModels
             if (SavedSettingsWindows.Any(a => a.Identifier == window.Identifier))
                 SavedSettingsWindows.Remove(window);
 
-           
-            UpdateSettingsWindowList();
+            UpdateSettings();
             GetDesktop();
         }
 
@@ -408,6 +407,8 @@ namespace SHInspect.ViewModels
         {
             if (!SavedSettingsWindows.Any(a => a.Identifier == window.Identifier))
                 SavedSettingsWindows.Add(window);
+
+            UpdateSettings();
 
             RefreshWindows();
         }

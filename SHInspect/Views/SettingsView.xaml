@@ -49,7 +49,8 @@
 
         <HeaderedContentControl Header="Windows To Inspect" Grid.Row="1" >
             <ui:SimpleStackPanel Margin="5">
-                <ListBox x:Name="WindowsToDisplay" ItemsSource="{Binding SavedSettingsWindows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  SelectedItem="{Binding SelectedExistingWindowItem, Mode=TwoWay}">
+                <ListBox x:Name="WindowsToDisplay" MaxHeight="300" ItemsSource="{Binding SavedSettingsWindows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  
+                         SelectedItem="{Binding SelectedExistingWindowItem, Mode=TwoWay}">
                     <i:Interaction.Behaviors>
                         <behaviours:BindableListBoxDoubleClickBehaviour/>
                     </i:Interaction.Behaviors>
@@ -95,7 +96,8 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock  Text="{Binding}" Style="{StaticResource BaseTextBlockStyle}"  Margin="5,0,10,10"  />
                                     <Button HorizontalAlignment="Right" Grid.Column="1"  IsTabStop="False" Focusable="False" Margin="0,0,10,0" Background="Transparent" 
-                                            Command="{Binding DataContext.RefreshWindowsCommand, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}" ToolTip="Refresh Active Windows">
+                                            Command="{Binding DataContext.RefreshWindowsCommand, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}" 
+                                            ToolTip="Refresh Active Windows">
                                         <fa:IconBlock Icon="SyncAlt" Focusable="False"/>
                                     </Button>
                                 </Grid>
@@ -105,7 +107,8 @@
                 </Style>
             </HeaderedContentControl.Style>
             <ui:SimpleStackPanel Margin="5">
-                <ListBox x:Name="ActiveWindows" ItemsSource="{Binding SettingsWindowList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  SelectedItem="{Binding SelectedCurrentWindowItem, Mode=TwoWay}" >
+                <ListBox x:Name="ActiveWindows" MaxHeight="300" ItemsSource="{Binding SettingsWindowList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                         SelectedItem="{Binding SelectedCurrentWindowItem, Mode=TwoWay}" >
                     <i:Interaction.Behaviors>
                         <behaviours:BindableListBoxDoubleClickBehaviour/>
                     </i:Interaction.Behaviors>
