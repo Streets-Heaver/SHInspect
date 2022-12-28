@@ -13,7 +13,7 @@
         <converters:ThemeTypeConverter x:Key="ThemeTypeConverter"/>
         <converters:NumericValueConverter x:Key="numericValueConverter" />
         <Style TargetType="HeaderedContentControl">
-            <Setter Property="Margin" Value="0,0,0,28" />
+            <Setter Property="Margin" Value="0,0,0,15" />
             <Setter Property="IsTabStop" Value="False" />
             <Setter Property="HeaderTemplate">
                 <Setter.Value>
@@ -21,7 +21,7 @@
                         <TextBlock
                             Text="{Binding}"
                             Style="{StaticResource BaseTextBlockStyle}"
-                            Margin="10,0,10,16" />
+                            Margin="5,0,10,10" />
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -44,9 +44,9 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Settings" FontSize="24" Margin="10" />
+        <TextBlock Text="Settings" FontSize="24" Margin="5,0,0,5" />
 
-        <HeaderedContentControl Header="Windows To Display" Grid.Row="1" >
+        <HeaderedContentControl Header="Windows To Inspect" Grid.Row="1" >
             <ui:SimpleStackPanel Margin="5">
                 <ListBox x:Name="WindowsToDisplay" ItemsSource="{Binding SavedSettingsWindows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  SelectedItem="{Binding SelectedExistingWindowItem, Mode=TwoWay}">
                     <i:Interaction.Behaviors>
@@ -113,22 +113,38 @@
             </ui:SimpleStackPanel>
         </HeaderedContentControl>
 
-        <HeaderedContentControl Header="Theming"  Grid.Row="2" Grid.Column="1">
-            <ui:SimpleStackPanel Margin="5">
-                <xctk:ColorPicker  SelectedColor="{Binding SelectedColour,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"  HorizontalAlignment="Left" ShowStandardColors="False" ShowRecentColors="False" ShowTabHeaders="False"  Background="Transparent" AvailableColorsSortingMode="HueSaturationBrightness">
-                    <xctk:ColorPicker.Style>
-                        <Style TargetType="{x:Type xctk:ColorPicker}" BasedOn="{StaticResource {x:Type xctk:ColorPicker}}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding SelectedThemeType, Converter={StaticResource ThemeTypeConverter}}" Value="Dark">
-                                    <Setter Property="HeaderForeground" Value="White"/>
-                                    <Setter Property="HeaderBackground" Value="Black"/>
-                                    <Setter Property="DropDownBackground" Value="Black"/>
-                                </DataTrigger>
-                            </Style.Triggers>
+        <HeaderedContentControl Header="Theming"   Grid.Row="2" Grid.Column="1">
+            <ui:SimpleStackPanel Margin="5"  >
+                <HeaderedContentControl Header="Selected Element Colour">
+                    <HeaderedContentControl.Style>
+                        <Style TargetType="{x:Type HeaderedContentControl}" >
+                            <Setter Property="HeaderTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" Margin="0,0,0,5" />
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
-                    </xctk:ColorPicker.Style>
-                </xctk:ColorPicker>
-                <ComboBox ui:ControlHelper.Header="Theme"   ItemsSource="{Binding ThemeTypes}" SelectedItem="{Binding SelectedThemeType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </HeaderedContentControl.Style>
+                    <xctk:ColorPicker ShowTabHeaders="False" MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ui:SimpleStackPanel}}, Mode=OneWay}" SelectedColor="{Binding SelectedColour,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"  
+                                      ShowStandardColors="False" ShowRecentColors="False"  Background="Transparent" AvailableColorsSortingMode="HueSaturationBrightness">
+                        <xctk:ColorPicker.Style>
+                            <Style TargetType="{x:Type xctk:ColorPicker}" BasedOn="{StaticResource {x:Type xctk:ColorPicker}}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedThemeType, Converter={StaticResource ThemeTypeConverter}}" Value="Dark">
+                                        <Setter Property="HeaderForeground" Value="White"/>
+                                        <Setter Property="HeaderBackground" Value="Black"/>
+                                        <Setter Property="DropDownBackground" Value="Black"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </xctk:ColorPicker.Style>
+                    </xctk:ColorPicker>
+                </HeaderedContentControl>
+
+                <ComboBox ui:ControlHelper.Header="Theme" MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ui:SimpleStackPanel}}, Mode=OneWay}" 
+                          ItemsSource="{Binding ThemeTypes}"  SelectedItem="{Binding SelectedThemeType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </ui:SimpleStackPanel>
         </HeaderedContentControl>
 
