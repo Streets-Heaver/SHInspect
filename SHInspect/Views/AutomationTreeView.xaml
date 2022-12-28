@@ -22,7 +22,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
-        <HeaderedContentControl Header="Visual Tree" Grid.Row="1" Grid.ColumnSpan="2" Margin="10">
+        <HeaderedContentControl Header="Visual Tree" Grid.Row="1" Grid.ColumnSpan="2" Margin="10" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <HeaderedContentControl.Style>
                 <Style TargetType="{x:Type HeaderedContentControl}" BasedOn="{StaticResource {x:Type HeaderedContentControl}}">
                     <Setter Property="HeaderTemplate">
@@ -58,7 +58,8 @@
                         </Style>
                     </fa:IconImage.Style>
                 </fa:IconImage>
-                <TreeView ItemsSource="{Binding Elements, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VirtualizingPanel.IsVirtualizing="True"  x:Name="ItemTree" UseLayoutRounding="True" AllowDrop="False"  Focusable="False" Grid.Column="0" BorderThickness="0">
+                <TreeView ItemsSource="{Binding Elements, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VirtualizingPanel.IsVirtualizing="True" 
+                          x:Name="ItemTree" UseLayoutRounding="True" AllowDrop="False"  Focusable="False" Grid.Column="0" BorderThickness="0">
                     <TreeView.Resources>
                         <SolidColorBrush Color="CornflowerBlue" x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"/>
                         <SolidColorBrush Color="CornflowerBlue" x:Key="{x:Static SystemColors.HighlightBrushKey}"/>

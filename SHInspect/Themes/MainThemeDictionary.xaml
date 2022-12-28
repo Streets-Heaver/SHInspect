@@ -5,7 +5,28 @@
                     
                     >
 
-    <Style TargetType="HeaderedContentControl">
+
+    <Style TargetType="ui:SimpleStackPanel">
+        <Setter Property="Spacing" Value="12" />
+    </Style>
+
+    <Style 
+           TargetType="{x:Type HeaderedContentControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ContentPresenter ContentSource="Header"/>
+                        <ContentPresenter Grid.Row="1"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
         <Setter Property="Margin" Value="0,0,0,15" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="HeaderTemplate">
@@ -18,10 +39,6 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-
-    <Style TargetType="ui:SimpleStackPanel">
-        <Setter Property="Spacing" Value="12" />
     </Style>
 
 </ResourceDictionary>
