@@ -13,24 +13,7 @@
     <UserControl.Resources>
         <converters:ThemeTypeConverter x:Key="ThemeTypeConverter"/>
         <converters:NumericValueConverter x:Key="numericValueConverter" />
-        <Style TargetType="HeaderedContentControl">
-            <Setter Property="Margin" Value="0,0,0,15" />
-            <Setter Property="IsTabStop" Value="False" />
-            <Setter Property="HeaderTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock
-                            Text="{Binding}"
-                            Style="{StaticResource BaseTextBlockStyle}"
-                            Margin="5,0,10,10" />
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="ui:SimpleStackPanel">
-            <Setter Property="Spacing" Value="12" />
-        </Style>
+        
     </UserControl.Resources>
     <Grid Margin="20,0">
 

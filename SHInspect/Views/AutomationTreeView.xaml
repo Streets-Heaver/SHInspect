@@ -22,7 +22,29 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
-        <GroupBox Header="Visual Tree" Grid.Row="1" Grid.ColumnSpan="2" Margin="10">
+        <HeaderedContentControl Header="Visual Tree" Grid.Row="1" Grid.ColumnSpan="2" Margin="10">
+            <HeaderedContentControl.Style>
+                <Style TargetType="{x:Type HeaderedContentControl}" BasedOn="{StaticResource {x:Type HeaderedContentControl}}">
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock  Text="{Binding}" Style="{StaticResource BaseTextBlockStyle}"  Margin="5,0,10,10"  />
+                                    <Button HorizontalAlignment="Right"  IsTabStop="False" Focusable="False" 
+                Padding="5" BorderThickness="0" Grid.Row="0" Grid.Column="1" Background="Transparent" 
+                                            Command="{Binding DataContext.RefreshGridCommand, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}" ToolTip="Refresh Visual Tree">
+                                        <fa:IconBlock Icon="SyncAlt" Focusable="False"/>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </HeaderedContentControl.Style>
             <Grid>
                 <fa:IconImage  Icon="Spinner" fa:Awesome.Spin="True" Foreground="Gray"  Height="30" Width="30" Panel.ZIndex="1">
                     <fa:IconImage.Style>
@@ -110,10 +132,8 @@
                     </TreeView.ItemTemplate>
                 </TreeView>
             </Grid>
-        </GroupBox>
-        <Button HorizontalAlignment="Right" Height="40" IsTabStop="False" Focusable="False"  Padding="5" BorderThickness="0" Grid.Row="0" Grid.Column="1" Background="Transparent" Command="{Binding RefreshGridCommand}" ToolTip="Refresh Grid">
-            <fa:IconBlock Icon="SyncAlt" Focusable="False"/>
-        </Button>
+        </HeaderedContentControl>
+       
         <Grid HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Height="20" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
