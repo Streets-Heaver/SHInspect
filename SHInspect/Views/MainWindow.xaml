@@ -153,8 +153,8 @@
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{Binding Path=Key}"  FontWeight="Bold" 
                                                  Padding="5" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"   ToolTip="{Binding Path=Key}"/>
-                                        
-                                        
+
+
                                         <Button Grid.Column="1" Background="Transparent" BorderThickness="0,1,0,1"
                                                 Command="{Binding DataContext.CopyValueCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
                                                 CommandParameter="{Binding Path=Value}" ToolTip="Copy">
@@ -191,27 +191,53 @@
                                 <DataTemplate>
                                     <Grid  Focusable="False"  HorizontalAlignment="Stretch" Width="{Binding ActualWidth, ElementName=PatternListBox}" >
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="3*"/>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="6*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBox Text="{Binding Path=Value}"  Padding="5" Grid.Column="2" IsReadOnly="True" IsTabStop="False" 
-                                                 BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"  Focusable="True">
-                                            <TextBox.Style>
-                                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+
+
+                                        <TextBlock Text="{Binding Path=Key}"  FontWeight="Bold" Padding="5" VerticalAlignment="Center"
+                                                 Grid.Column="0"   Focusable="False" ToolTip="{Binding Path=Key}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                    <Setter Property="HorizontalAlignment"  Value="Stretch"/>
+
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding PatternType, Converter={StaticResource PatternTypeConverter}}" Value="Header">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsSupported}" Value="True"></Condition>
+                                                                <Condition Binding="{Binding PatternType}" Value="Header"></Condition>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <MultiDataTrigger.Setters>
+                                                                <Setter Property="Foreground" Value="Green"/>
+                                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                                                <Setter Property="Grid.ColumnSpan" Value="3"/>
+                                                            </MultiDataTrigger.Setters>
+                                                        </MultiDataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsSupported}" Value="False"></Condition>
+                                                                <Condition Binding="{Binding PatternType}" Value="Header"></Condition>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <MultiDataTrigger.Setters>
+                                                                <Setter Property="Foreground" Value="Red"/>
+                                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                                                <Setter Property="Grid.ColumnSpan" Value="3"/>
+                                                            </MultiDataTrigger.Setters>
+                                                        </MultiDataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </TextBox.Style>
-                                        </TextBox>
-                                        <Button Grid.Column="1" Background="Transparent" BorderThickness="0,1,0,1" Command="{Binding DataContext.CopyValueCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding Path=Value}" ToolTip="Copy">
+                                            </TextBlock.Style>
+                                        </TextBlock>
+
+                                        <Button Grid.Column="1" Background="Transparent" BorderThickness="0,1,0,1"
+                                                Command="{Binding DataContext.CopyValueCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" 
+                                                CommandParameter="{Binding Path=Value}" ToolTip="Copy">
                                             <fa:IconBlock Icon="Copy" FontSize="18">
                                                 <fa:IconBlock.Style>
-                                                    <Style TargetType="fa:IconBlock">
+                                                    <Style TargetType="{x:Type fa:IconBlock}">
                                                         <Setter Property="Foreground" Value="Gray"></Setter>
                                                         <Style.Triggers>
                                                             <Trigger Property="IsEnabled" Value="False">
@@ -235,11 +261,12 @@
                                                 </Style>
                                             </Button.Style>
                                         </Button>
-                                        <Button Grid.Column="1"  BorderThickness="0,1,0,1" Command="{Binding DataContext.InvokeMethodCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding Path=Method}" ToolTip="Invoke">
-                                            <fa:IconBlock Icon="Play" FontSize="18">
+                                        <Button Grid.Column="1"  BorderThickness="0,1,0,1" 
+                                                Command="{Binding DataContext.InvokeMethodCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                                CommandParameter="{Binding Path=Method}" ToolTip="Invoke">
+                                            <fa:IconBlock Icon="Play" Padding="3,0" FontSize="18">
                                                 <fa:IconBlock.Style>
-                                                    <Style TargetType="fa:IconBlock">
-                                                        <!--<Setter Property="Foreground" Value="Green"></Setter>-->
+                                                    <Style TargetType="{x:Type fa:IconBlock}">
                                                         <Style.Triggers>
                                                             <Trigger Property="IsEnabled" Value="False">
                                                                 <Setter Property="Foreground" Value="LightGray"/>
@@ -265,37 +292,15 @@
                                                 </Style>
                                             </Button.Style>
                                         </Button>
-                                        <TextBox Text="{Binding Path=Key}" BorderThickness="1" FontWeight="Bold" Padding="5,5,0,0"
-                                                 Grid.Column="0" IsReadOnly="True"  Focusable="False" ToolTip="{Binding Path=Key}">
+
+                                        <TextBox Text="{Binding Path=Value}"  Padding="5" Grid.Column="2" IsReadOnly="True" IsTabStop="False"  Margin="10,0"
+                                                 BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"  Focusable="True">
                                             <TextBox.Style>
                                                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                                                    <Setter Property="HorizontalAlignment"  Value="Stretch"/>
-                                                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
                                                     <Style.Triggers>
-                                                        <MultiDataTrigger>
-                                                            <MultiDataTrigger.Conditions>
-                                                                <Condition Binding="{Binding IsSupported}" Value="True"></Condition>
-                                                                <Condition Binding="{Binding PatternType}" Value="Header"></Condition>
-                                                            </MultiDataTrigger.Conditions>
-                                                            <MultiDataTrigger.Setters>
-                                                                <Setter Property="Foreground" Value="Green"/>
-                                                                <Setter Property="HorizontalAlignment"  Value="Stretch"/>
-                                                                <Setter Property="Grid.ColumnSpan" Value="3"/>
-                                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                                            </MultiDataTrigger.Setters>
-                                                        </MultiDataTrigger>
-                                                        <MultiDataTrigger>
-                                                            <MultiDataTrigger.Conditions>
-                                                                <Condition Binding="{Binding IsSupported}" Value="False"></Condition>
-                                                                <Condition Binding="{Binding PatternType}" Value="Header"></Condition>
-                                                            </MultiDataTrigger.Conditions>
-                                                            <MultiDataTrigger.Setters>
-                                                                <Setter Property="Foreground" Value="Red"/>
-                                                                <Setter Property="HorizontalAlignment"  Value="Stretch"/>
-                                                                <Setter Property="Grid.ColumnSpan" Value="3"/>
-                                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                                            </MultiDataTrigger.Setters>
-                                                        </MultiDataTrigger>
+                                                        <DataTrigger Binding="{Binding PatternType, Converter={StaticResource PatternTypeConverter}}" Value="Header">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </TextBox.Style>
