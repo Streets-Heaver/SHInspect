@@ -3,17 +3,9 @@ using SHAutomation.Core.AutomationElements;
 using SHInspect.Classes;
 using SHInspect.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SHInspect.Views
 {
@@ -22,14 +14,20 @@ namespace SHInspect.Views
     /// </summary>
     public partial class AutomationTreeView : UserControl
     {
+        DispatcherTimer _hoverTimer;
+        private int _hoverCount;
+        private ItemsControl _hoveredItem;
+        private int _hoverSelectTime;
         public AutomationTreeView()
         {
             InitializeComponent();
+           
+
         }
         private void TreeViewSelectedHandler(object sender, RoutedEventArgs e)
         {
             var item = sender as ItemsControl;
-            this.Tag = item;
+            Tag = item;
             item.Focus();
             if (item != null)
             {
@@ -38,24 +36,63 @@ namespace SHInspect.Views
             }
         }
 
-        private void TreeViewMouseEnterSelectedHandler(object sender, RoutedEventArgs e)
+        private void OnHoverTimerTick(object sender, EventArgs e)
         {
-            if ((DataContext as MainViewModel).HoverSelect)
+            _hoverCount++;
+            if (_hoverCount >= 2)
             {
-                var item = sender as ItemsControl;
-                this.Tag = item;
-                item.Focus();
-                if (item != null)
+                // Select the item
+                _hoverTimer.Stop();
+                _hoverCount = 0;
+
+                if ((DataContext as MainViewModel).HoverSelect)
                 {
-                    item.BringIntoView();
-                    TreeViewItem treeItem = (item as TreeViewItem);
-                    if (!treeItem.IsExpanded)
+                    if (_hoveredItem != null)
                     {
-                        treeItem.IsExpanded = true;
+                        Tag = _hoveredItem;
+                        _hoveredItem.Focus();
+
+                        _hoveredItem.BringIntoView();
+                        TreeViewItem treeItem = (_hoveredItem as TreeViewItem);
+                        if (!treeItem.IsExpanded)
+                        {
+                            treeItem.IsExpanded = true;
+                        }
+
                     }
-                    e.Handled = true;
                 }
             }
+        }
+
+        private void TreeViewMouseLeaveSelectedHandler(object sender, RoutedEventArgs e)
+        {
+            _hoverTimer.Stop();
+            _hoverCount = 0;
+            _hoveredItem = null;
+        }
+
+        private void TreeViewMouseEnterSelectedHandler(object sender, RoutedEventArgs e)
+        {
+            if (_hoverTimer == null)
+            {
+                _hoverTimer = new DispatcherTimer();
+                _hoverSelectTime = (DataContext as MainViewModel).HoverSelectTime;
+                _hoverTimer.Interval = TimeSpan.FromMilliseconds(_hoverSelectTime);
+                _hoverTimer.Tick += OnHoverTimerTick;
+            }
+
+            if ((DataContext as MainViewModel).HoverSelectTime != _hoverSelectTime)
+            {
+                _hoverSelectTime = (DataContext as MainViewModel).HoverSelectTime;
+                _hoverTimer.Stop();
+                _hoverTimer.Interval = TimeSpan.FromMilliseconds(_hoverSelectTime);
+                _hoverTimer.Start();
+            }
+
+            _hoverTimer.Start();
+            _hoverCount = 0;
+            _hoveredItem = sender as ItemsControl;
+
         }
 
 

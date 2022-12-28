@@ -22,7 +22,29 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition ></RowDefinition>
         </Grid.RowDefinitions>
-        <GroupBox Header="Visual Tree" Grid.Row="1" Grid.ColumnSpan="2" Margin="10">
+        <HeaderedContentControl Header="Visual Tree" Grid.Row="1" Grid.ColumnSpan="2" Margin="10" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <HeaderedContentControl.Style>
+                <Style TargetType="{x:Type HeaderedContentControl}" BasedOn="{StaticResource {x:Type HeaderedContentControl}}">
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock  Text="{Binding}" Style="{StaticResource BaseTextBlockStyle}"  Margin="5,0,10,10"  />
+                                    <Button HorizontalAlignment="Right"  IsTabStop="False" Focusable="False" 
+                Padding="5" BorderThickness="0" Grid.Row="0" Grid.Column="1" Background="Transparent" 
+                                            Command="{Binding DataContext.RefreshGridCommand, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}" ToolTip="Refresh Visual Tree">
+                                        <fa:IconBlock Icon="SyncAlt" Focusable="False"/>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </HeaderedContentControl.Style>
             <Grid>
                 <fa:IconImage  Icon="Spinner" fa:Awesome.Spin="True" Foreground="Gray"  Height="30" Width="30" Panel.ZIndex="1">
                     <fa:IconImage.Style>
@@ -36,7 +58,8 @@
                         </Style>
                     </fa:IconImage.Style>
                 </fa:IconImage>
-                <TreeView ItemsSource="{Binding Elements, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VirtualizingPanel.IsVirtualizing="True"  x:Name="ItemTree" UseLayoutRounding="True" AllowDrop="False"  Focusable="False" Grid.Column="0" BorderThickness="0">
+                <TreeView ItemsSource="{Binding Elements, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VirtualizingPanel.IsVirtualizing="True" 
+                          x:Name="ItemTree" UseLayoutRounding="True" AllowDrop="False"  Focusable="False" Grid.Column="0" BorderThickness="0">
                     <TreeView.Resources>
                         <SolidColorBrush Color="CornflowerBlue" x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"/>
                         <SolidColorBrush Color="CornflowerBlue" x:Key="{x:Static SystemColors.HighlightBrushKey}"/>
@@ -60,6 +83,7 @@
                             <EventSetter Event="Selected" Handler="TreeViewSelectedHandler" />
                             <EventSetter Event="MouseDown" Handler="TreeViewSelectedHandler" />
                             <EventSetter Event="MouseEnter" Handler="TreeViewMouseEnterSelectedHandler" />
+                            <EventSetter Event="MouseLeave" Handler="TreeViewMouseLeaveSelectedHandler" />
                             <Style.Triggers>
 
                                 <DataTrigger Binding="{Binding IsTemporary}" Value="True">
@@ -109,10 +133,8 @@
                     </TreeView.ItemTemplate>
                 </TreeView>
             </Grid>
-        </GroupBox>
-        <Button HorizontalAlignment="Right" Height="40" IsTabStop="False" Focusable="False"  Padding="5" BorderThickness="0" Grid.Row="0" Grid.Column="1" Background="Transparent" Command="{Binding RefreshGridCommand}" ToolTip="Refresh Grid">
-            <fa:IconBlock Icon="SyncAlt" Focusable="False"/>
-        </Button>
+        </HeaderedContentControl>
+       
         <Grid HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0" Grid.Row="0" Height="20" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

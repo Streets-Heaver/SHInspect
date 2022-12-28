@@ -69,7 +69,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <ComboBox Grid.Column="2" Width="150" IsTabStop="False" HorizontalContentAlignment="Stretch" FontSize="12" VerticalContentAlignment="Center" ItemsSource="{Binding SearchTerms, ElementName=searchBox}" SelectedItem="{Binding SelectedSearchTerm, ElementName=searchBox, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+        <ComboBox Grid.Column="2" Width="150" Margin="5,0" IsTabStop="False" HorizontalContentAlignment="Stretch" FontSize="12" VerticalContentAlignment="Center" ItemsSource="{Binding SearchTerms, ElementName=searchBox}" SelectedItem="{Binding SelectedSearchTerm, ElementName=searchBox, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
             <ComboBox.Style>
                 <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
                     <Setter Property="Visibility" Value="Visible"/>

@@ -1,23 +1,13 @@
 ﻿using ModernWpf;
 using SHAutomation.Core;
 using SHAutomation.Core.AutomationElements;
-using SHAutomation.Core.Input;
-using SHAutomation.Core.StaticClasses;
 using SHAutomation.UIA3;
 using SHInspect.Classes;
 using SHInspect.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -30,10 +20,8 @@ namespace SHInspect.ViewModels
         private bool _isSearching;
         private List<string> _searchTerms;
         private List<ThemeType> _ThemeTypes;
-
         private string _selectedSearchTerm;
         private ThemeType? _selectedThemeType;
-
         private ElementBO _selectedItem;
         private ElementBO _selectedItemInTree;
         private WindowBO _selectedCurrentWindowItem;
@@ -45,20 +33,23 @@ namespace SHInspect.ViewModels
         private ObservableCollection<ElementBO> _elements;
         private ISHAutomationElement[] _searchResults;
         private int _currentSearchIndex;
-        private System.Windows.Media.Color _selectedColour;
+        private Color _selectedColour;
         private bool _hoverSelect;
+        private int _hoverSelectTime;
         private UIA3Automation _automation;
         private ImageSource _image;
         private bool _isLive;
         private bool _isInspecting;
         public DispatcherTimer _dispatcherTimer;
         private DateTime _previousRefresh;
+        private ITreeWalker _treeWalker;
+
         public bool Inspecting
         {
             get { return _isInspecting; }
             set { _isInspecting = value; }
         }
-        
+
         public string SearchText
         {
             get { return _searchText; }
@@ -313,6 +304,14 @@ namespace SHInspect.ViewModels
                 RaisePropertyChanged();
             }
         }
+
+
+        public int HoverSelectTime
+        {
+            get { return _hoverSelectTime; }
+            set { _hoverSelectTime = value; }
+        }
+
         public string SearchResultText
         {
             get { return SearchResults.Any() ? $"Search Results: {CurrentSearchIndex + 1}/{SearchResults.Count()}" : null; }

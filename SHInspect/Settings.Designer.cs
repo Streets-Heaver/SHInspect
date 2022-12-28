@@ -95,5 +95,17 @@ namespace SHInspect {
                 this["Theme"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("700")]
+        public int HoverSelectTime {
+            get {
+                return ((int)(this["HoverSelectTime"]));
+            }
+            set {
+                this["HoverSelectTime"] = value;
+            }
+        }
     }
 }

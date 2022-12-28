@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SHInspect.Constants
+﻿namespace SHInspect.Constants
 {
     public static class SHInspectConstants
     {

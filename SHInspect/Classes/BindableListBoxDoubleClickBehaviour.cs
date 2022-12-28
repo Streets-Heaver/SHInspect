@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Controls;
-using System.Windows;
+﻿using System.Windows.Controls;
 using Microsoft.Xaml.Behaviors;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace SHInspect.Classes
 {
@@ -14,31 +9,34 @@ namespace SHInspect.Classes
         protected override void OnAttached()
         {
             base.OnAttached();
-
-            this.AssociatedObject.MouseDoubleClick += OnDoubleClickItem;
+            AssociatedObject.MouseDoubleClick += OnDoubleClickItem;
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
 
-            if (this.AssociatedObject != null)
+            if (AssociatedObject != null)
             {
-                this.AssociatedObject.MouseDoubleClick -= OnDoubleClickItem;
+                AssociatedObject.MouseDoubleClick -= OnDoubleClickItem;
             }
         }
 
         private void OnDoubleClickItem(object sender, MouseButtonEventArgs e)
         {
             ListBox src = e.Source as ListBox;
-            
+
             if (src != null)
             {
                 switch (e.ChangedButton)
                 {
                     case MouseButton.Left:
                         {
-                            (src.DataContext as ViewModels.MainViewModel).AddWindow();
+                            if (src.Name == "ActiveWindows")
+                                (src.DataContext as ViewModels.MainViewModel).AddWindow((WindowBO)src.SelectedItem);
+                            else if (src.Name == "WindowsToDisplay")
+                                (src.DataContext as ViewModels.MainViewModel).RemoveWindow((WindowBO)src.SelectedItem);
+
                         }
                         break;
                 }

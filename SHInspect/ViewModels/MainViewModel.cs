@@ -1,28 +1,20 @@
-﻿using ModernWpf;
-using Prism.Commands;
-using SHAutomation.Core;
+﻿using Prism.Commands;
 using SHAutomation.Core.AutomationElements;
 using SHAutomation.Core.Definitions;
-using SHAutomation.Core.Exceptions;
-using SHAutomation.Core.StaticClasses;
 using SHAutomation.UIA3;
 using SHInspect.Classes;
 using SHInspect.Constants;
 using SHInspect.Enums;
 using SHInspect.Extensions;
-using SHInspect.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml.XPath;
@@ -31,33 +23,12 @@ namespace SHInspect.ViewModels
 {
     public partial class MainViewModel : ViewModelBase
     {
-
-        private ITreeWalker _treeWalker;
-        public DelegateCommand AddWindowCommand { get; private set; }
-        public DelegateCommand CrashWindowCommand { get; private set; }
-        public DelegateCommand DeleteWindowCommand { get; private set; }
-        public DelegateCommand SearchCommand { get; private set; }
-        public DelegateCommand RefreshGridCommand { get; private set; }
-        public DelegateCommand RefreshWindowsCommand { get; private set; }
-        public DelegateCommand RefreshDetailsCommand { get; private set; }
-        public DelegateCommand IsLiveCommand { get; private set; }
-        public DelegateCommand CopyXPathCommand { get; private set; }
-        public DelegateCommand NextResultCommand { get; private set; }
-        public DelegateCommand PreviousResultCommand { get; private set; }
-        public DelegateCommand GoToParentCommand { get; private set; }
-        public DelegateCommand GoToRootCommand { get; private set; }
-        public DelegateCommand MakeTemporaryCommand { get; private set; }
-        public DelegateCommand RemoveWindowCommand { get; private set; }
-        public DelegateCommand<string> CopyValueCommand { get; private set; }
-        public DelegateCommand <MethodDetails> InvokeMethodCommand { get; private set; }
-        public DelegateCommand FocusCommand { get; private set; }
-        
         public MainViewModel()
         {
             SearchTerms = new List<string>() { SHInspectConstants.AutomationId, SHInspectConstants.Name, SHInspectConstants.ClassName, SHInspectConstants.ControlType, SHInspectConstants.XPath };
             ThemeTypes = Enum.GetValues(typeof(ThemeType)).Cast<ThemeType>().ToList();
 
-            AddWindowCommand = new DelegateCommand(AddWindow, CanAddWindow);
+            AddWindowCommand = new DelegateCommand<WindowBO>(AddWindow, CanAddWindow);
             CrashWindowCommand = new DelegateCommand(CrashWindow, CanCrashWindow);
             DeleteWindowCommand = new DelegateCommand(DeleteWindow);
             RefreshGridCommand = new DelegateCommand(RefreshGrid);
@@ -71,8 +42,8 @@ namespace SHInspect.ViewModels
             FocusCommand = new DelegateCommand(FocusElement, () => SelectedItemInTree != null && SelectedItemInTree.AutomationElement.IsPropertySupportedDirect(new SHAutomation.Core.Identifiers.PropertyId(30009, SHInspectConstants.IsKeyboardFocusable)));
             GoToParentCommand = new DelegateCommand(GoToParent, CanGoToParent);
             GoToRootCommand = new DelegateCommand(GoToRoot, CanGoToRoot);
-            RemoveWindowCommand = new DelegateCommand(RemoveWindow, CanRemoveWindow);
-            MakeTemporaryCommand = new DelegateCommand(MakeTemporary, CanRemoveWindow);
+            RemoveWindowCommand = new DelegateCommand<WindowBO>(RemoveWindow, CanRemoveWindow);
+            //MakeTemporaryCommand = new DelegateCommand(MakeTemporary, CanRemoveWindow);
 
             CopyValueCommand = new DelegateCommand<string>(CopyValue, CanCopyValue);
             InvokeMethodCommand = new DelegateCommand<MethodDetails>(InvokeMethod, CanInvokeMethod);
@@ -88,8 +59,9 @@ namespace SHInspect.ViewModels
             var savedWins = Settings.Default.Windows;
             var inspectColour = Settings.Default.InspectionColour;
             HoverSelect = Settings.Default.HoverSelect;
+            HoverSelectTime = Settings.Default.HoverSelectTime;
 
-            SelectedColour = new System.Windows.Media.Color()
+            SelectedColour = new Color()
             {
                 A = inspectColour.A,
                 R = inspectColour.R,
@@ -236,8 +208,8 @@ namespace SHInspect.ViewModels
 
             if (Properties != null && newProperties != null)
             {
-                var output = Properties.Intersect(newProperties, new DetailBOComparer()).Count();
-                if (output != Properties.Count)
+                var output = Properties.Intersect(newProperties, new DetailBOComparer());
+                if (output.Count() != Properties.Count)
                 {
                     Properties = newProperties;
                     Patterns = SelectedItemInTree != null ? AutomationHelpers.GetElementDetailViewModelPatterns(SelectedItemInTree.AutomationElement) : null;
@@ -269,8 +241,8 @@ namespace SHInspect.ViewModels
             {
                 method.Method.Invoke(method.TargetObject, null);
             }
-            catch(Exception)
-            { 
+            catch (Exception)
+            {
             }
         }
         public void ChangeLiveState()
@@ -399,11 +371,12 @@ namespace SHInspect.ViewModels
             string[] wins = SavedSettingsWindows.Where(x => !x.IsTemporary).Select(x => x.Identifier).ToArray();
             newCollection.AddRange(wins);
             Settings.Default.HoverSelect = HoverSelect;
+            Settings.Default.HoverSelectTime = HoverSelectTime;
             Settings.Default.Windows = newCollection;
             Settings.Default.InspectionColour = System.Drawing.Color.FromArgb(SelectedColour.A, SelectedColour.R, SelectedColour.G, SelectedColour.B);
             Settings.Default.Save();
         }
-        public bool CanAddWindow()
+        public bool CanAddWindow(WindowBO window)
         {
             return IdentifierToAdd != null && !string.IsNullOrEmpty(IdentifierToAdd.Trim()) && !SavedSettingsWindows.Any(x => x.Identifier == IdentifierToAdd);
         }
@@ -420,23 +393,23 @@ namespace SHInspect.ViewModels
         {
             throw new TestCrashException("You pressed the 'Test Crash' button so I crashed!");
         }
-        public void AddWindow()
+
+        public void RemoveWindow(WindowBO window)
         {
-            var item = new WindowBO(IdentifierToAdd, false);
-            if (item.IsCurrent)
-            {
-                item.IsCurrent = false;
-                SavedSettingsWindows.Add(item);
-                SelectedCurrentWindowItem = null;
-            }
-            else
-            {
-                SavedSettingsWindows.Remove(SelectedWindowItem);
-                item.IsTemporary = SelectedWindowItem.IsTemporary;
-                SavedSettingsWindows.Add(item);
-                SelectedCurrentWindowItem = null;
-            }
-            IdentifierToAdd = null;
+            if (SavedSettingsWindows.Any(a => a.Identifier == window.Identifier))
+                SavedSettingsWindows.Remove(window);
+
+            UpdateSettings();
+            GetDesktop();
+        }
+
+        public void AddWindow(WindowBO window)
+        {
+            if (!SavedSettingsWindows.Any(a => a.Identifier == window.Identifier))
+                SavedSettingsWindows.Add(window);
+
+            UpdateSettings();
+
             RefreshWindows();
         }
         public bool CanSearch()
@@ -543,17 +516,7 @@ namespace SHInspect.ViewModels
                 return false;
             }
         }
-        public void RemoveWindow()
-        {
-            var win = new WindowBO(SelectedItemInTree.AutomationElement, false);
-            var savedWindows = SavedSettingsWindows.Where(x => x.Identifier == win.Identifier).ToList();
-            foreach (var delWindow in savedWindows)
-            {
-                SavedSettingsWindows.Remove(delWindow);
-            }
-            UpdateSettingsWindowList();
-            GetDesktop();
-        }
+
         public void MakeTemporary()
         {
             var win = new WindowBO(SelectedItemInTree.AutomationElement, false);
@@ -575,7 +538,7 @@ namespace SHInspect.ViewModels
             UpdateSettingsWindowList();
             GetDesktop();
         }
-        public bool CanRemoveWindow()
+        public bool CanRemoveWindow(WindowBO window)
         {
             return SelectedItemInTree != null && SelectedItemInTree.AutomationElement != null && (SelectedItemInTree.AutomationElement.Parent == null || SelectedItemInTree.AutomationElement.Parent.Equals(DesktopItem));
         }
@@ -603,13 +566,13 @@ namespace SHInspect.ViewModels
             if (element.RootElement == null)
             {
                 var id = element?.AutomationElement?.ProcessId ?? -1;
-                if(id < 0)
+                if (id < 0)
                 {
                     return null;
                 }
                 var root = Elements.FirstOrDefault(x => x.AutomationElement.ProcessId == id);
 
-                if(root != null)
+                if (root != null)
                 {
                     return root.AutomationElement;
                 }
@@ -638,7 +601,7 @@ namespace SHInspect.ViewModels
             {
                 return element.RootElement;
             }
-       
+
         }
     }
 }
